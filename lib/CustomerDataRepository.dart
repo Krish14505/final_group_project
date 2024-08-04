@@ -45,9 +45,11 @@ static void loadData() {
 
 }
 
+//This method is used to saved the data in the device explorer
 static void saveData() {
   var prefs = EncryptedSharedPreferences();
 
+  //set the string while saving data.
   prefs.setString("first_name", first_name);
   prefs.setString("last_name", last_name);
   prefs.setString("phoneNumber", phoneNumber);
