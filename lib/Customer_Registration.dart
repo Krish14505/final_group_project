@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/CustomerDataRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomerDatabase.dart';
@@ -336,6 +335,7 @@ void savedData() {
   savedCustomer.getString("first_Name").then((encryptedFName) {
     if (encryptedFName  != null ){
       _firstName.text = encryptedFName; // reassign the textField value to saved one.
+      displaySnackBarClearData(); //calling a function when firstName contains a value.
     }
   });
   //get the string from saved File when loading the page
@@ -343,6 +343,7 @@ void savedData() {
     if (encryptedLName  != null ){
       _lastName.text = encryptedLName; // reassign the textField value to saved one.
     }
+
   });
 
   //get the string from saved File when loading the page
@@ -371,5 +372,31 @@ void savedData() {
   });
 }
 
+
+  void displaySnackBarClearData() {
+    var snackBar = SnackBar(content: Text("The Previous customer informations have been loaded ! "),
+      action:SnackBarAction(label:"Clear Saved Data",onPressed: removingTextFied,));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+  }
+
+  //clear the TextField
+  void removingTextFied() {
+    //remove first from the encryptedSharedPreferences
+    savedCustomer.remove("first_Name");
+    savedCustomer.remove("last_Name");
+    savedCustomer.remove("email");
+    savedCustomer.remove("phoneNumber");
+    savedCustomer.remove("address");
+    savedCustomer.remove("birthday");
+
+    //remove the TextField values
+    _firstName.text = "";
+    _lastName.text = "";
+    _email.text = "";
+    _phoneNumber.text = "";
+    _address.text= "";
+    _birthday.text = "";
+  }
 
 }
