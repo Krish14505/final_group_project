@@ -79,12 +79,31 @@ static List<Customer> customerLists= [];
 
   }
 
+void HelpButton() {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('About Registration:'),
+      content: const Text('Welcome to the Customer Registration Page,'+
+          'Please feel free to fill out all the information such as Name, Phone, Email,'
+              ' birthday date, email. Thank You !  '),
+      actions: <Widget>[
+       ElevatedButton(onPressed: (){ Navigator.pop(context); }, child: const  Text("Ok"))
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
   return Scaffold(
-    appBar: AppBar(backgroundColor: Colors.cyan,title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,),
+    appBar: AppBar(backgroundColor: Colors.cyan,
+                   title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
+                   actions: [
+                     FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
+                   ],
+                  ),
     body: SingleChildScrollView (
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
