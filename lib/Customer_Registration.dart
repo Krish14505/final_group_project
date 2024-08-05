@@ -1,3 +1,4 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
@@ -32,6 +33,9 @@ static List<Customer> customerLists= [];
   late TextEditingController _address;
   late TextEditingController _birthday;
 
+  //creating a EncryptedSharedPreference Instance;
+  late EncryptedSharedPreferences savedCustomer ;
+
   @override
   void initState() {
     super.initState(); // initialize all the late variables .
@@ -51,20 +55,15 @@ static List<Customer> customerLists= [];
       customerdao.getAllCustomers().then((ListOfCustomers) {
         customerLists.addAll(ListOfCustomers); // when loading the page , all the existing customer should be in the list.
 
-      });
+      }); // get all customers
+    }); // FloorCustomerDatabase
 
-    });
 
-    //saved preferences for the previously created customer
-    CustomerDataRepository.first_name = _firstName.value.text;
-    CustomerDataRepository.last_name = _lastName.value.text;
-    CustomerDataRepository.email  = _email.value.text;
-    CustomerDataRepository.phoneNumber = _phoneNumber.value.text;
-    CustomerDataRepository.address = _address.value.text;
-    CustomerDataRepository.birthday = _birthday.value.text;
+    // initialize the SavedCustomer
+    savedCustomer = EncryptedSharedPreferences();
 
-    //loading the data
-    CustomerDataRepository.loadData();
+    //call the function SavedData() to place the all the previous customer details to TextField
+    savedData();
 
   }
 
@@ -78,7 +77,6 @@ static List<Customer> customerLists= [];
     _birthday.dispose();
     super.dispose();
 
-    CustomerDataRepository.saveData();
 
   }
 
@@ -300,14 +298,9 @@ static List<Customer> customerLists= [];
         //invoking a method to insert the new customer into the table
         customerdao.addCustomer(newCustomer);
 
-        //empty all the spaces.
-
-      _firstName.text = " ";
-      _lastName.text =" ";
-      _email.text =  " ";
-      _phoneNumber.text =  " ";
-      _address.text = " ";
-      _birthday.text =  " ";
+       //when the user clicks on the register button it calls this function to save the TextField value to deviceExplorer file
+      // in key --> value pairs as Encrypted.
+      sendCustomerData();
     }
   }
 
@@ -322,6 +315,61 @@ void PhoneLauncher() {
     launch("tel: "+userTypedPhoneNumber);
 }
 
+
+//set the values to the encryptedSharedPreferences to what user has typed
+  void sendCustomerData(){
+
+    //saved the TextField value to EncryptedSharedPreferences file
+    savedCustomer.setString("first_Name", _firstName.value.text);
+    savedCustomer.setString("last_Name",  _lastName.value.text);
+    savedCustomer.setString("email",  _email.value.text);
+    savedCustomer.setString("phoneNumber",  _phoneNumber.value.text);
+    savedCustomer.setString("address", _phoneNumber.value.text);
+    savedCustomer.setString("birthday", _birthday.value.text);
+
+  }
+
+//Implementing the function to load the saved(previous) customer data
+void savedData() {
+
+  //get the string from saved File when loading the page
+  savedCustomer.getString("first_Name").then((encryptedFName) {
+    if (encryptedFName  != null ){
+      _firstName.text = encryptedFName; // reassign the textField value to saved one.
+    }
+  });
+  //get the string from saved File when loading the page
+  savedCustomer.getString("last_Name").then((encryptedLName) {
+    if (encryptedLName  != null ){
+      _lastName.text = encryptedLName; // reassign the textField value to saved one.
+    }
+  });
+
+  //get the string from saved File when loading the page
+  savedCustomer.getString("email").then((encryptedEmail) {
+    if (encryptedEmail  != null ){
+      _email.text = encryptedEmail; // reassign the textField value to saved one.
+    }
+  });
+  //get the string from saved File when loading the page
+  savedCustomer.getString("phoneNumber").then((encryptedPhone) {
+    if (encryptedPhone  != null ){
+      _phoneNumber.text = encryptedPhone; // reassign the textField value to saved one.
+    }
+  });
+  //get the string from saved File when loading the page
+  savedCustomer.getString("address").then((encryptedAddress) {
+    if (encryptedAddress  != null ){
+      _address.text = encryptedAddress; // reassign the textField value to saved one.
+    }
+  });
+  //get the string from saved File when loading the page
+  savedCustomer.getString("birthday").then((encryptedBday) {
+    if (encryptedBday  != null ){
+      _birthday.text = encryptedBday; // reassign the textField value to saved one.
+    }
+  });
+}
 
 
 }
