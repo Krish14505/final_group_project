@@ -58,8 +58,12 @@ static List<Customer> customerLists= [];
       }); // get all customers
     }); // FloorCustomerDatabase
 
+
+    // initialize the SavedCustomer
+    savedCustomer = EncryptedSharedPreferences();
+
     //call the function SavedData() to place the all the previous customer details to TextField
-    savedData;
+    savedData();
 
   }
 
@@ -327,8 +331,6 @@ void PhoneLauncher() {
 
 //Implementing the function to load the saved(previous) customer data
 void savedData() {
-  // initialize the SavedCustomer
-  savedCustomer = EncryptedSharedPreferences();
 
   //get the string from saved File when loading the page
   savedCustomer.getString("first_Name").then((encryptedFName) {
