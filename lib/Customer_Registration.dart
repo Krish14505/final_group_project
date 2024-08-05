@@ -294,7 +294,9 @@ static List<Customer> customerLists= [];
         //invoking a method to insert the new customer into the table
         customerdao.addCustomer(newCustomer);
 
-        //Invoke the method to save the customer data(TextField values) to the encryptedSharedPreference file.
+       //when the user clicks on the register button it calls this function to save the TextField value to deviceExplorer file
+      // in key --> value pairs as Encrypted.
+      sendCustomerData();
     }
   }
 
@@ -308,6 +310,20 @@ void PhoneLauncher() {
     var userTypedPhoneNumber = _phoneNumber.value.text;
     launch("tel: "+userTypedPhoneNumber);
 }
+
+
+//set the values to the encryptedSharedPreferences to what user has typed
+  void sendCustomerData(){
+
+    //saved the TextField value to EncryptedSharedPreferences file
+    savedCustomer.setString("first_Name", _firstName.value.text);
+    savedCustomer.setString("last_Name",  _lastName.value.text);
+    savedCustomer.setString("email",  _email.value.text);
+    savedCustomer.setString("phoneNumber",  _phoneNumber.value.text);
+    savedCustomer.setString("address", _phoneNumber.value.text);
+    savedCustomer.setString("birthday", _birthday.value.text);
+
+  }
 
 //Implementing the function to load the saved(previous) customer data
 void savedData() {
