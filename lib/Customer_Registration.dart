@@ -1,11 +1,76 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'CustomerAppLocalizations.dart';
 import 'CustomerDatabase.dart';
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() {
+    return _MyAppState(); //constructor
+  }
+  //static method which call the method changeLanguage.
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale); // calls changeLanguage
+  }
+
+  //closing
+}
+
+class _MyAppState extends State<MyApp> {
+   var locale = Locale("en","CA");
+
+   //The method that is used to change the language.
+  void changeLanguage(Locale newLang){
+    setState(() {
+      locale = newLang;
+    });
+  }
+
+//The widget is the root of your application
+  @override
+  Widget build(BuildContext context) {
+   return MaterialApp( //add supported languages
+
+     supportedLocales: [
+                          Locale("en","CA"),
+                          Locale("fr" , "DE")
+     ],
+
+     //mention which classes are responsible for doing the transition work.
+     localizationsDelegates: [
+       AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+       GlobalWidgetsLocalizations.delegate
+     ],
+
+     //initial default language
+     locale: locale,
+     title: "Final Project",
+     theme: ThemeData(
+       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+       useMaterial3: true,
+     ),
+
+   );
+  }
+
+
+}
+
+
+
+
+//Customer Registration page
+
 
 class CustomerRegistration extends StatefulWidget {
    String  title= "Customer Registration Page" ;
@@ -101,6 +166,8 @@ void HelpButton() {
     appBar: AppBar(backgroundColor: Colors.cyan,
                    title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
                    actions: [
+                     OutlinedButton(onPressed: () {MyApp.setLocale(context,Locale("fr","CA")); } , child: Text("Switch to French")),
+                    OutlinedButton(onPressed: () {MyApp.setLocale(context, Locale("en","CA")); } , child: Text("Switch to English")),
                      FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
                    ],
                   ),
@@ -393,7 +460,7 @@ void savedData() {
 
 
   void displaySnackBarClearData() {
-    var snackBar = SnackBar(content: Text("The Previous customer informations have been loaded ! "),
+    var snackBar = SnackBar(content: const Text("The Previous customer informations have been loaded ! "),
       action:SnackBarAction(label:"Clear Saved Data",onPressed: removingTextFied,));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
