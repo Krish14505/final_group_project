@@ -1,43 +1,87 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/CustomerListPage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:group_project/CustomerAppLocalizations.dart';
 
+import 'CustomerListPage.dart';
 import 'Customer_Registration.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
-class MyApp extends StatelessWidget {
+                //not stateless as we want to change the language
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  //override the method
   @override
-  Widget build(BuildContext context) {
+  State<MyApp> createState() {
+    return _MyAppState();
+  }
 
-    return MaterialApp(
-      //decides the routes of the pages for the application
-      routes: {
-        //it will be sorted & defined as key and value pairs
-        '/homePage' : (context) => MyHomePage(title: 'Airline Management',),
-        '/registerPage': (context) => CustomerRegistration(),
-        '/listPage' : (context) => CustomerListPage(),
-        //add other pages that you have made.
-
-
-      },
-      initialRoute: '/homePage',
-      title: 'Home page',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-        useMaterial3: true,
-      ),
-
-    );
-
+  //given setLocale method in module
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale); // calls changeLanguage
   }
 }
+
+
+  class _MyAppState extends State<MyApp> {
+
+  //create the variable for Locale
+    var locale = Locale("en","CA");
+
+    void changeLanguage(Locale newLang){
+      setState(() {
+        locale = newLang; //gui to respond
+      });
+    }
+
+    // This widget is the root of your application.
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+
+        //declares the supportedLanguages for the application
+        supportedLocales: [
+                        Locale("en","CA"),
+                        Locale("de","DE")
+
+        ],
+
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+
+        //set the default language
+        locale:locale,
+
+        //decides the routes of the pages for the application
+        routes: {
+          //it will be sorted & defined as key and value pairs
+          '/homePage': (context) => MyHomePage(title: 'Airline Management',),
+          '/registerPage': (context) => CustomerRegistration(),
+          '/listPage': (context) => CustomerListPage(),
+          //add other pages that you have made.
+
+
+        },
+        initialRoute: '/homePage',
+        title: 'Home page',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+          useMaterial3: true,
+        ),
+
+      );
+    }
+  }
+
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
