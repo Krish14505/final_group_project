@@ -3,6 +3,7 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
+import 'package:group_project/CustomerAppLocalizations.dart';
 import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -87,11 +88,8 @@ void HelpButton() {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text(
-          'About Registration:'),
-      content: const Text('Welcome to the Customer Registration Page,'+
-          'Please feel free to fill out all the information such as Name, Phone, Email,'
-              ' birthday date, email. Thank You !  '),
+      title:  Text( AppLocalizations.of(context)!.translate("about_regi_key")!), // added the internationalization
+      content:  Text(AppLocalizations.of(context)!.translate("about_regi_description")!),
       actions: <Widget>[
        ElevatedButton(onPressed: (){ Navigator.pop(context); }, child: const  Text("Ok"))
       ],
@@ -116,7 +114,7 @@ void HelpButton() {
         children: <Widget>[
 
           SizedBox(height: 20),
-          Text("Welcome to the Registration Page",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
+          Text(AppLocalizations.of(context)!.translate("welcome_title_registration")!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
 
 
           ///first row for the customer last name and first name.
@@ -136,7 +134,7 @@ void HelpButton() {
                 ),
                 child: TextField(controller: _firstName,
                     decoration: InputDecoration(
-                        hintText:"Enter  First Name",
+                        hintText:AppLocalizations.of(context)!.translate("first_name_text"),
                         border: OutlineInputBorder(),
                         labelText: "First Name"
                     )),
@@ -161,7 +159,7 @@ void HelpButton() {
                 ),
                 child: TextField(controller: _lastName,
                     decoration: InputDecoration(
-                        hintText:"Enter Last Name",
+                        hintText:AppLocalizations.of(context)!.translate("last_name_text"),
                         border: OutlineInputBorder(),
                         labelText: "Last Name"
                     )),
@@ -188,7 +186,7 @@ void HelpButton() {
                   ),
                   child: TextField(controller: _birthday,
                       decoration: InputDecoration(
-                          hintText:"Enter Date Of Birth",
+                          hintText:AppLocalizations.of(context)!.translate("birthday_text"),
                           border: OutlineInputBorder(),
                           labelText: "BirthDate"
                       )),
@@ -210,7 +208,7 @@ void HelpButton() {
                 ),
                 child: TextField(controller: _email,
                     decoration: InputDecoration(
-                        hintText:"Enter Your Email address",
+                        hintText:AppLocalizations.of(context)!.translate("email_text"),
                         border: OutlineInputBorder(),
                         labelText: "Email"
                     )),
@@ -234,7 +232,7 @@ void HelpButton() {
                 ),
                 child: TextField(controller: _phoneNumber,
                     decoration: InputDecoration(
-                        hintText:"Enter phone number ",
+                        hintText:AppLocalizations.of(context)!.translate("phone_text"),
                         border: OutlineInputBorder(),
                         labelText: "PhoneNumber"
                     )),
@@ -257,7 +255,7 @@ void HelpButton() {
                 ),
                 child: TextField(controller: _address,
                     decoration: InputDecoration(
-                        hintText:"Enter Your Address",
+                        hintText:AppLocalizations.of(context)!.translate("address_key"),
                         border: OutlineInputBorder(),
                         labelText: "Address:"
                     )),
@@ -269,7 +267,7 @@ void HelpButton() {
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: FilledButton(
               onPressed: registerCustomer,
-              child: Text("Register", style: TextStyle(fontSize: 20)),
+              child: Text(AppLocalizations.of(context)!.translate("register_btn")!, style: TextStyle(fontSize: 20)),
             ),
           ),
 
@@ -303,7 +301,7 @@ void HelpButton() {
     }
     //each of fields is filled then the following:
     else {
-      var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
+      var snackBar = SnackBar( content: Text(AppLocalizations.of(context)!.translate("register_Success")!, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       ///navigate to the list page
        Navigator.pushNamed(context, "/listPage"); //redirect to the home page
@@ -395,8 +393,8 @@ void savedData() {
 
 
   void displaySnackBarClearData() {
-    var snackBar = SnackBar(content: const Text("The Previous customer informations have been loaded ! "),
-      action:SnackBarAction(label:"Clear Saved Data",onPressed: removingTextFied,));
+    var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.translate("loaded_data_key")!),
+      action:SnackBarAction(label:AppLocalizations.of(context)!.translate("clear_data")!,onPressed: removingTextFied,));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
   }
