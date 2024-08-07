@@ -4,6 +4,7 @@
   "register_button"          : "Registrierungsseite",
   "reservation_page"         : "Reservierungsseite",
   "flights_Page"             : "Seite „Flüge“",
-  "airplane_list"            : "Flugzeugliste"
+  "airplane_list"            : "Flugzeugliste",
+  "application_Title"        : "Fluglinienmanagement"
 
 }

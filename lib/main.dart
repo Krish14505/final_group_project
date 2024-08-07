@@ -64,7 +64,7 @@ class MyApp extends StatefulWidget {
         //decides the routes of the pages for the application
         routes: {
           //it will be sorted & defined as key and value pairs
-          '/homePage': (context) => MyHomePage(title: 'Airline Management',),
+          '/homePage': (context) => MyHomePage(title:AppLocalizations.of(context)!.translate("application_Title")!,),
           '/registerPage': (context) => CustomerRegistration(),
           '/listPage': (context) => CustomerListPage(),
           //add other pages that you have made.
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         //implement a button to change the language to all the application pages.
         actions: [
-          OutlinedButton(onPressed: showTranslateButton, child: Icon(Icons.translate))
+          OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.translate), style: OutlinedButton.styleFrom(side: BorderSide.none, ),)
         ],
       ),
       body: Center(
@@ -148,10 +148,10 @@ class _MyHomePageState extends State<MyHomePage> {
         content: const Text(''),
         actions: <Widget>[
           //button for french
-          OutlinedButton(onPressed:() {
-              MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, child: Text("German")),
-          OutlinedButton(onPressed:(){
-            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, child: Text("English")),
+          FilledButton(onPressed:() {
+              MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text("German")),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text("English")),
         ],
       ),
     );
