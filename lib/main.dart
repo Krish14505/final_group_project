@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/CustomerListPage.dart';
 import 'Airplane_list_page.dart';
 
 
 
-import 'Customer_Registration.dart';
 
 void main() {
   runApp(const MyApp());
