@@ -1,12 +1,15 @@
+
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/CustomerDataRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomerDatabase.dart';
+
+//Customer Registration page
+
 
 class CustomerRegistration extends StatefulWidget {
    String  title= "Customer Registration Page" ;
@@ -80,12 +83,33 @@ static List<Customer> customerLists= [];
 
   }
 
+void HelpButton() {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text(
+          'About Registration:'),
+      content: const Text('Welcome to the Customer Registration Page,'+
+          'Please feel free to fill out all the information such as Name, Phone, Email,'
+              ' birthday date, email. Thank You !  '),
+      actions: <Widget>[
+       ElevatedButton(onPressed: (){ Navigator.pop(context); }, child: const  Text("Ok"))
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
   return Scaffold(
-    appBar: AppBar(backgroundColor: Colors.cyan,title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,),
+    appBar: AppBar(backgroundColor: Colors.cyan,
+                   title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
+                   actions: [
+
+                     FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
+                   ],
+                  ),
     body: SingleChildScrollView (
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -240,19 +264,15 @@ static List<Customer> customerLists= [];
               ),
             ],),
           //creating Register button to register the user as the customer
-          SizedBox(
-            width: 300, // Set the width of the button
-            height: 60, // Set the height of the button
-            child:
-            Expanded (
-              flex: 10,
-              child: FilledButton(
-                onPressed: registerCustomer,
-                child: Text("Register", style: TextStyle(fontSize: 20)), // Adjust font size if needed
-              ),
-            )
-            ,
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: FilledButton(
+              onPressed: registerCustomer,
+              child: Text("Register", style: TextStyle(fontSize: 20)),
+            ),
           ),
+
 
 
         ],
@@ -323,8 +343,8 @@ void PhoneLauncher() {
     savedCustomer.setString("first_Name", _firstName.value.text);
     savedCustomer.setString("last_Name",  _lastName.value.text);
     savedCustomer.setString("email",  _email.value.text);
-    savedCustomer.setString("phoneNumber",  _phoneNumber.value.text);
-    savedCustomer.setString("address", _phoneNumber.value.text);
+    savedCustomer.setString("phoneNumber",_phoneNumber.value.text);
+    savedCustomer.setString("address", _address.value.text);
     savedCustomer.setString("birthday", _birthday.value.text);
 
   }
@@ -336,6 +356,7 @@ void savedData() {
   savedCustomer.getString("first_Name").then((encryptedFName) {
     if (encryptedFName  != null ){
       _firstName.text = encryptedFName; // reassign the textField value to saved one.
+      displaySnackBarClearData(); //calling a function when firstName contains a value.
     }
   });
   //get the string from saved File when loading the page
@@ -343,6 +364,7 @@ void savedData() {
     if (encryptedLName  != null ){
       _lastName.text = encryptedLName; // reassign the textField value to saved one.
     }
+
   });
 
   //get the string from saved File when loading the page
@@ -370,6 +392,44 @@ void savedData() {
     }
   });
 }
+
+
+  void displaySnackBarClearData() {
+    var snackBar = SnackBar(content: const Text("The Previous customer informations have been loaded ! "),
+      action:SnackBarAction(label:"Clear Saved Data",onPressed: removingTextFied,));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+  }
+
+  //clear the TextField
+  void removingTextFied() async {
+    List<String> keysToRemove = [
+      "first_Name",
+      "last_Name",
+      "email",
+      "phoneNumber",
+      "address",
+      "birthday"
+    ];
+
+    //Handle the unwanted excpetion
+    for (var key in keysToRemove) {
+      try {
+        await savedCustomer.remove(key);
+        print('Successfully removed key: $key');
+      } catch (e) {
+        print('Error removing key $key: $e');
+      }
+    }
+
+    // Clear TextField values
+    _firstName.text = "";
+    _lastName.text = "";
+    _email.text = "";
+    _phoneNumber.text = "";
+    _address.text = "";
+    _birthday.text = "";
+  }
 
 
 }
