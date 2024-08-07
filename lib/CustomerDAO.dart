@@ -1,5 +1,4 @@
 import 'package:floor/floor.dart';
-
 import 'Customer.dart';
 
 ///This class contains the method to perform the CRUD operation.

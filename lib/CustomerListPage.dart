@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/Customer.dart';
-import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/Customer_Registration.dart';
 
+import 'Customer.dart';
+import 'CustomerDAO.dart';
 import 'CustomerDatabase.dart';
+import 'Customer_Registration.dart';
 
 /**
  * This customer list page has two pages: first on the left-hand side it has all the customer
@@ -54,11 +54,10 @@ class CustomerListPageState extends State<CustomerListPage> {
       //fetch the customer from the customerList and put all into the database
       customerdao.getAllCustomers().then((ListOfCustomers) {
         customerLists.addAll(ListOfCustomers); // when loading the page , all the existing customer should be in the list.
+      }); //getAll Customers.
+    }); //FloorCustomerDatabase
 
-      });
-
-    });
-  }
+}
 
   @override
   void dispose() {
