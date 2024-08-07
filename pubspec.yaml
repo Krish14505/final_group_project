@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/translation/en.json
     - assets/translation/de.json
+    - assets/translation/fr.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
