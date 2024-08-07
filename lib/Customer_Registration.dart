@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/CustomerDataRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomerDatabase.dart';
