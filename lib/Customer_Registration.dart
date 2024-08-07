@@ -12,8 +12,9 @@ import 'main.dart';
 
 //Customer Registration page
 
-
+///class contains the form for registering customer
 class CustomerRegistration extends StatefulWidget {
+  ///Title of the page
    String  title= "Customer Registration Page" ;
 
   @override
@@ -23,14 +24,16 @@ class CustomerRegistration extends StatefulWidget {
 
 }
 
+///registrationState class
 class CustomerRegistrationState extends State<CustomerRegistration> {
 
-//variables should be defined here.
-//creating the dao object
+///Customer dao object
 late CustomerDAO customerdao ;
+
+///List of Customer
 static List<Customer> customerLists= [];
 
-  ///declare all the variables used in the textfield.
+///Text Editing Controller where user enters required information.
   late TextEditingController _firstName;
   late TextEditingController _lastName;
   late TextEditingController _email;
@@ -38,7 +41,7 @@ static List<Customer> customerLists= [];
   late TextEditingController _address;
   late TextEditingController _birthday;
 
-  //creating a EncryptedSharedPreference Instance;
+  ///an EncryptedSharedPreference Instance to save Customer information in device file explorer;
   late EncryptedSharedPreferences savedCustomer ;
 
   @override
@@ -85,6 +88,7 @@ static List<Customer> customerLists= [];
 
   }
 
+  ///button that shows an alert dialog of how to use the page
 void HelpButton() {
   showDialog<String>(
     context: context,
@@ -286,6 +290,7 @@ void HelpButton() {
 
   }
 
+  ///function when the user clicks on the register button
   void registerCustomer() {
 
     if(_firstName.value.text ==  ""  || _lastName.value.text == "" || _email.value.text == "" || _phoneNumber.value.text == "" || _birthday.value
@@ -325,19 +330,21 @@ void HelpButton() {
     }
   }
 
+  ///Function for email url launcher
 void  emailLauncher() {
   var userTypedEmailAddress = _email.value.text;
   launch("mailto: "+userTypedEmailAddress);
 }
 
 
+///function for phone Url launcher
 void PhoneLauncher() {
     var userTypedPhoneNumber = _phoneNumber.value.text;
     launch("tel: "+userTypedPhoneNumber);
 }
 
 
-//set the values to the encryptedSharedPreferences to what user has typed
+///set the values to the encryptedSharedPreferences to what user has typed
   void sendCustomerData(){
 
     //saved the TextField value to EncryptedSharedPreferences file
@@ -350,7 +357,7 @@ void PhoneLauncher() {
 
   }
 
-//Implementing the function to load the saved(previous) customer data
+///Implementing the function to load the saved(previous) customer data
 void savedData() {
 
   //get the string from saved File when loading the page
@@ -395,6 +402,7 @@ void savedData() {
 }
 
 
+///function to display the snackbar to clear the previous customer information
   void displaySnackBarClearData() {
     var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.translate("loaded_data_key")!),
       action:SnackBarAction(label:AppLocalizations.of(context)!.translate("clear_data")!,onPressed: removingTextFied,));
@@ -402,7 +410,7 @@ void savedData() {
 
   }
 
-  //clear the TextField
+  ///clear the TextField
   void removingTextFied() async {
     List<String> keysToRemove = [
       "first_Name",
