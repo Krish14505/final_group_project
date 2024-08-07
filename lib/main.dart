@@ -23,8 +23,6 @@ class MyApp extends StatelessWidget {
       routes: {
         //it will be sorted & defined as key and value pairs
         '/homePage' : (context) => MyHomePage(title: 'Airline Management',),
-        '/registerPage': (context) => CustomerRegistration(),
-        '/listPage' : (context) => CustomerListPage(),
         '/airplaneListPage': (context) => AirplaneListPage(),
         // Add this line
         },
