@@ -1,4 +1,9 @@
 {
-  "string": "Beeindruckend!",
-  "string_with_interpolation": "Hey $name, wie geht es dir?"
+  "string"                   : "Beeindruckend!",
+  "string_with_interpolation": "Hey $name, wie geht es dir?",
+  "register_button"          : "Registrierungsseite",
+  "reservation_page"         : "Reservierungsseite",
+  "flights_Page"             : "Seite „Flüge“",
+  "airplane_list"            : "Flugzeugliste"
+
 }
