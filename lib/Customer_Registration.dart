@@ -8,6 +8,7 @@ import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomerDatabase.dart';
+import 'main.dart';
 
 //Customer Registration page
 
@@ -104,6 +105,8 @@ void HelpButton() {
     appBar: AppBar(backgroundColor: Colors.cyan,
                    title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
                    actions: [
+                     //implement a button to change the language from the registration page.
+                       OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.language_outlined), style: OutlinedButton.styleFrom(side: BorderSide.none, ),),
 
                      FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
                    ],
@@ -290,8 +293,8 @@ void HelpButton() {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Incomplete Registration! '),
-          content: const Text('Please Fill out all the fields.'),
+          title:  Text(AppLocalizations.of(context)!.translate("alert_dialog_title_invalid_data")!),
+          content:  Text(AppLocalizations.of(context)!.translate("warning_message_alert_dialog")!),
           actions: <Widget>[
             ElevatedButton(onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),),
@@ -427,6 +430,29 @@ void savedData() {
     _phoneNumber.text = "";
     _address.text = "";
     _birthday.text = "";
+  }
+
+
+  ///Function to show an alert-dialog to change the language of the application
+//function which show the alert dialog to select the language
+  void showTranslateButton() {
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          FilledButton(onPressed:() {
+              MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ],
+      ),
+    );
   }
 
 
