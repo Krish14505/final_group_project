@@ -13,17 +13,19 @@ void main() {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  //given setLocale method in module
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale); // calls changeLanguage
+  }
+
   //override the method
   @override
   State<MyApp> createState() {
     return _MyAppState();
   }
 
-  //given setLocale method in module
-  static void setLocale(BuildContext context, Locale newLocale) async {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-    state?.changeLanguage(newLocale); // calls changeLanguage
-  }
+
 }
 
 
@@ -102,12 +104,33 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        //implement a button to change the language to all the application pages.
+        actions: [
+          OutlinedButton(onPressed: showTranslateButton, child: Icon(Icons.translate))
+        ],
       ),
-      body: SingleChildScrollView(
+      body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: registrationDirector, child: Text("Registration Page"),),
+
+              //1. Button for the customer Register Button.
+                                                                      //change the button Text language when altering language
+              ElevatedButton(onPressed: registrationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
+              SizedBox(height: 10,),
+
+              //2.Button for Reservation Page
+              ElevatedButton(onPressed: ()  { }, child: Text(AppLocalizations.of(context)!.translate("reservation_page")!)),
+              SizedBox(height: 10,),
+
+              //3. button for Flights Page
+              ElevatedButton(onPressed: () {  }, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
+              SizedBox(height: 10,),
+
+              //4.button for Airplane List
+              ElevatedButton(onPressed: () { } , child: Text(AppLocalizations.of(context)!.translate("airplane_list")!)),
+              SizedBox(height: 10,),
+
             ],
           )
 
@@ -115,6 +138,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
+ //function which show the alert dialog to select the language
+  void showTranslateButton() {
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          OutlinedButton(onPressed:() {
+              MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, child: Text("German")),
+          OutlinedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, child: Text("English")),
+        ],
+      ),
+    );
+  }
+
 
   void registrationDirector() {
     Navigator.pushNamed(context, '/registerPage');
