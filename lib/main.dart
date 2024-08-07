@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/CustomerListPage.dart';
+import 'Airplane_list_page.dart';
+
+
 
 import 'Customer_Registration.dart';
 
@@ -22,10 +25,11 @@ class MyApp extends StatelessWidget {
         '/homePage' : (context) => MyHomePage(title: 'Airline Management',),
         '/registerPage': (context) => CustomerRegistration(),
         '/listPage' : (context) => CustomerListPage(),
-        //add other pages that you have made.
+        '/airplaneListPage': (context) => AirplaneListPage(),
+        // Add this line
+        },
 
 
-      },
       initialRoute: '/homePage',
       title: 'Home page',
       debugShowCheckedModeBanner: false,
@@ -50,29 +54,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: registrationDirector, child: Text("Registration Page"),),
-            ],
-          )
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/registerPage'),
+              child: Text("Registration Page"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/airplaneListPage'),
+              child: Text("Airplane List Page"),
+            ),
 
+            // New Button for adding airplanes
+          ],
+        ),
       ),
-
     );
-  }
-
-  void registrationDirector() {
-    Navigator.pushNamed(context, '/registerPage');
   }
 }
