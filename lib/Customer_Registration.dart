@@ -1,73 +1,12 @@
-import 'dart:js_interop_unsafe';
 
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'CustomerAppLocalizations.dart';
 import 'CustomerDatabase.dart';
-
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() {
-    return _MyAppState(); //constructor
-  }
-  //static method which call the method changeLanguage.
-  static void setLocale(BuildContext context, Locale newLocale) async {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-    state?.changeLanguage(newLocale); // calls changeLanguage
-  }
-
-  //closing
-}
-
-class _MyAppState extends State<MyApp> {
-   var locale = Locale("en","CA");
-
-   //The method that is used to change the language.
-  void changeLanguage(Locale newLang){
-    setState(() {
-      locale = newLang;
-    });
-  }
-
-//The widget is the root of your application
-  @override
-  Widget build(BuildContext context) {
-   return MaterialApp( //add supported languages
-
-     supportedLocales: [
-                          Locale("en","CA"),
-                          Locale("fr" , "DE")
-     ],
-
-     //mention which classes are responsible for doing the transition work.
-     localizationsDelegates: [
-       AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-       GlobalWidgetsLocalizations.delegate
-     ],
-
-     //initial default language
-     locale: locale,
-     title: "Final Project",
-     theme: ThemeData(
-       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-       useMaterial3: true,
-     ),
-
-   );
-  }
-
-
-}
-
-
-
 
 //Customer Registration page
 
@@ -148,7 +87,8 @@ void HelpButton() {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('About Registration:'),
+      title: const Text(
+          'About Registration:'),
       content: const Text('Welcome to the Customer Registration Page,'+
           'Please feel free to fill out all the information such as Name, Phone, Email,'
               ' birthday date, email. Thank You !  '),
@@ -166,8 +106,7 @@ void HelpButton() {
     appBar: AppBar(backgroundColor: Colors.cyan,
                    title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
                    actions: [
-                     OutlinedButton(onPressed: () {MyApp.setLocale(context,Locale("fr","CA")); } , child: Text("Switch to French")),
-                    OutlinedButton(onPressed: () {MyApp.setLocale(context, Locale("en","CA")); } , child: Text("Switch to English")),
+
                      FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
                    ],
                   ),
@@ -325,19 +264,15 @@ void HelpButton() {
               ),
             ],),
           //creating Register button to register the user as the customer
-          SizedBox(
-            width: 300, // Set the width of the button
-            height: 60, // Set the height of the button
-            child:
-            Expanded (
-              flex: 10,
-              child: FilledButton(
-                onPressed: registerCustomer,
-                child: Text("Register", style: TextStyle(fontSize: 20)), // Adjust font size if needed
-              ),
-            )
-            ,
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: FilledButton(
+              onPressed: registerCustomer,
+              child: Text("Register", style: TextStyle(fontSize: 20)),
+            ),
           ),
+
 
 
         ],
@@ -408,8 +343,8 @@ void PhoneLauncher() {
     savedCustomer.setString("first_Name", _firstName.value.text);
     savedCustomer.setString("last_Name",  _lastName.value.text);
     savedCustomer.setString("email",  _email.value.text);
-    savedCustomer.setString("phoneNumber",  _phoneNumber.value.text);
-    savedCustomer.setString("address", _phoneNumber.value.text);
+    savedCustomer.setString("phoneNumber",_phoneNumber.value.text);
+    savedCustomer.setString("address", _address.value.text);
     savedCustomer.setString("birthday", _birthday.value.text);
 
   }
@@ -467,22 +402,34 @@ void savedData() {
   }
 
   //clear the TextField
-  void removingTextFied() {
-    //remove first from the encryptedSharedPreferences
-    savedCustomer.remove("first_Name");
-    savedCustomer.remove("last_Name");
-    savedCustomer.remove("email");
-    savedCustomer.remove("phoneNumber");
-    savedCustomer.remove("address");
-    savedCustomer.remove("birthday");
+  void removingTextFied() async {
+    List<String> keysToRemove = [
+      "first_Name",
+      "last_Name",
+      "email",
+      "phoneNumber",
+      "address",
+      "birthday"
+    ];
 
-    //remove the TextField values
+    //Handle the unwanted excpetion
+    for (var key in keysToRemove) {
+      try {
+        await savedCustomer.remove(key);
+        print('Successfully removed key: $key');
+      } catch (e) {
+        print('Error removing key $key: $e');
+      }
+    }
+
+    // Clear TextField values
     _firstName.text = "";
     _lastName.text = "";
     _email.text = "";
     _phoneNumber.text = "";
-    _address.text= "";
+    _address.text = "";
     _birthday.text = "";
   }
+
 
 }
