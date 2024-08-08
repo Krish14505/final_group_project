@@ -53,15 +53,9 @@ class flightListPageState extends State<FlightListPage>{
     _departureController = TextEditingController();
     _arrivalController  =TextEditingController();
 
-    //pending the database  thing
-    final migration3to4 = Migration(3, 4, (database) async {
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS `Flights` (`flight_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `destination` TEXT, `source` TEXT, `departure` TEXT, `arrival` TEXT)",
-      );
-    });
 
 
-    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration3to4]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
         flightsDAO = database.getFlightDAO;
 
         flightsDAO.getAllFlights().then((listofFlights) {

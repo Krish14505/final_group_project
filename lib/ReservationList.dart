@@ -41,14 +41,10 @@ class ReservationListState extends State<ReservationList> {
     super.initState();
     _reservationName = TextEditingController();
 
-    final migration2to3 = Migration(2, 3, (database) async{
-      await database.execute(
-          "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
-      );
-    });
+
 
     //creating the database connection
-    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       var reservationDAO = database.getReservationDAO;
       reservationDAO.getAllReservations().then((listofReservation) {
         reservationList.addAll(listofReservation);

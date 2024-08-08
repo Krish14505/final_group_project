@@ -38,14 +38,8 @@ class AirplaneListPageState extends State<AirplaneListPage> {
     _maximum_speed = TextEditingController();
     _distance = TextEditingController();
 
-    final migration1to2 = Migration(1, 2, (database) async {
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `airplaneType` TEXT, `PassengerNum` TEXT, `maxSpeed` TEXT, `distance` TEXT)",
-      );
-    });
-
     //creating the database connection
-    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       AirplaneDAO = database.getAirplaneDAO; // instantiate the database object
       AirplaneDAO.getAllAirPlanes().then((listOfAirplanes) {
         airplaneLists.addAll(listOfAirplanes);

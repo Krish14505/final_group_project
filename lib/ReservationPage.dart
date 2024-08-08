@@ -37,15 +37,10 @@ class ReservationPageState extends State<ReservationPage> {
     //initialize the SavedReservation object
     savedReservation = EncryptedSharedPreferences();
 
-    //add the migration to keep the reservation table in the same customerDatabase
-    final migration2to3 = Migration(2, 3, (database) async{
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
-      );
-    });
+
 
     //creating the database connection
-    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       reservationDAO = database.getReservationDAO;
       customerDAO = database.getCustomerDAO;
       reservationDAO.getAllReservations().then((listofReservation) {
