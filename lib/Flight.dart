@@ -4,7 +4,7 @@ import 'package:floor/floor.dart';
 @entity
 class Flight{
 
-  static int ID = 0;
+  static int ID = 1;
 
   @primaryKey
   final int flight_id;
