@@ -4,7 +4,7 @@ description: "A new Flutter project."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
+# The following defines the version and build number for your applicdation.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   floor: ^1.4.0
   flutter_test:
     sdk: flutter
@@ -50,6 +52,7 @@ dev_dependencies:
   floor_generator: ^1.4.0
   build_runner: ^2.1.2
 
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -69,7 +72,10 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/translation/en.json
+    - assets/translation/de.json
+    - assets/translation/fr.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
