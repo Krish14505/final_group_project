@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/CustomerListPage.dart';
-
+import 'FlightListPage.dart';
 import 'Customer_Registration.dart';
 
 void main() {
@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/homePage' : (context) => MyHomePage(title: 'Airline Management',),
         '/registerPage': (context) => CustomerRegistration(),
         '/listPage' : (context) => CustomerListPage(),
+        '/flightPage' : (context) => FlightListPage(),
         //add other pages that you have made.
 
 
