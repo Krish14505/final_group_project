@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+import 'AppLocalizations.dart';
 import 'CustomerDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
@@ -109,7 +110,7 @@ class ReservationListState extends State<ReservationList> {
       child:Column(
         children: [
           if(reservationList.isEmpty)
-      Text("*There is no reservation added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+      Text(AppLocalizations.of(context)!.translate("RLelT")!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
     else
             Flexible(
               child: ListView.builder(
@@ -145,14 +146,14 @@ class ReservationListState extends State<ReservationList> {
   }
   Widget ReservationDetailsWithForm(){
     if (selectedReservation == null){
-      return Text("Nothing is selected ");
+      return Text(AppLocalizations.of(context)!.translate("RLdetformAlert")!);
     } else {
       return SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 20),
-          Text("Reservation Details", style: TextStyle(
+          Text(AppLocalizations.of(context)!.translate("RLdetformInfo")!, style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
             fontStyle: FontStyle.italic

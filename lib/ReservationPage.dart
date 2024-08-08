@@ -3,6 +3,7 @@ import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerDAO.dart';
 import 'CustomerDatabase.dart';
 import 'Reservation.dart';
@@ -64,18 +65,18 @@ class ReservationPageState extends State<ReservationPage> {
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('Missing Fields!'),
-            content: const Text('Please Fill out all the fields.'),
+            title:  Text(AppLocalizations.of(context)!.translate("RPalertDioalogT")! ),
+            content: Text(AppLocalizations.of(context)!.translate("RPalertDioalogC")!),
             actions: <Widget>[
-              ElevatedButton(onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),),
-            ],
+              ElevatedButton(onPressed: () => Navigator.pop(context, AppLocalizations.of(context)!.translate("about_regi_description")!),
+                child:  Text( AppLocalizations.of(context)!.translate("ok")!),
+              )],
           ),
         );
       }
     //each of fields is filled then the following:
     else {
-      var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
+      var snackBar = SnackBar( content: Text(AppLocalizations.of(context)!.translate("RPsuccussMsg")!, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       ///navigate to the list page
       Navigator.pushNamed(context, "/reservationList"); //redirect to the home page
@@ -91,39 +92,30 @@ class ReservationPageState extends State<ReservationPage> {
     sendReservationData();
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Reservation added')),
-    );
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reservation Page'),
+        title: Text(AppLocalizations.of(context)!.translate("RPtitle")!),
         actions: [
           IconButton(
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Instructions'),
-                  content: const SingleChildScrollView(
+                  title: Text(AppLocalizations.of(context)!.translate("RPinstructionT")!),
+                  content: SingleChildScrollView(
                     child: ListBody(
                       children: <Widget>[
-                        Text('1. Adding a Reservation:\n'
-                        '- Enter the name of the reservation in the text field provided.\n'
-                        '- Press the "Add Reservation" button to add the reservation to the list.'),
+                        Text(AppLocalizations.of(context)!.translate("RPaddResIns")!),
                         SizedBox(height: 10),
-                        Text('2. Viewing Reservation Details:\n'
-                         '- Tap on any reservation in the list to view its details.'),
+                        Text(AppLocalizations.of(context)!.translate("RPviewResIns")!),
                         SizedBox(height: 10),
-                        Text('3. Copying Previous Customer Information:\n'
-                        '- When adding a new customer, you can choose to copy the information from the previous customer.'),
+                        Text(AppLocalizations.of(context)!.translate("RPcopyIns")!),
                         SizedBox(height: 10),
-                        Text('4. Navigation:\n'
-                       '- Use the back button or the app\'s navigation controls to go back to the home page or other sections of the app.'),
+                        Text(AppLocalizations.of(context)!.translate("RPnavIns")!),
                       ],
                     ),
                   ),
@@ -132,7 +124,7 @@ class ReservationPageState extends State<ReservationPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text("OK"),
+                      child: Text(AppLocalizations.of(context)!.translate("ok")!),
                     )
                   ],
                 ),
@@ -149,7 +141,7 @@ class ReservationPageState extends State<ReservationPage> {
           children: [
             DropdownButton<String>(
               value: selectedCustomer,
-              hint: Text('Select Customer'),
+              hint: Text(AppLocalizations.of(context)!.translate("RPddmCN")!),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedCustomer = newValue;
@@ -165,7 +157,7 @@ class ReservationPageState extends State<ReservationPage> {
             SizedBox(height: 16),
             DropdownButton<String>(
               value: selectedFlight,
-              hint: Text('Select Flight'),
+              hint: Text(AppLocalizations.of(context)!.translate("RPddmFN")!),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedFlight = newValue;
@@ -182,9 +174,9 @@ class ReservationPageState extends State<ReservationPage> {
             TextField(
               controller: _reservationName,
               decoration: InputDecoration(
-                hintText: "Enter Reservation Name",
+                hintText: AppLocalizations.of(context)!.translate("RPresnameH"),
                 border: OutlineInputBorder(),
-                labelText: "Reservation Name",
+                labelText: AppLocalizations.of(context)!.translate("RPresnameL"),
               ),
               maxLength: 30,
             ),
@@ -192,16 +184,16 @@ class ReservationPageState extends State<ReservationPage> {
             TextField(
               controller: _reservationDate,
               decoration: InputDecoration(
-                hintText: "Enter Reservation Date",
+                hintText: AppLocalizations.of(context)!.translate("RPresdateH"),
                 border: OutlineInputBorder(),
-                labelText: "Reservation Date",
+                labelText: AppLocalizations.of(context)!.translate("RPresdateL"),
               ),
               maxLength: 30,
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _addReservation,
-              child: Text('Add Reservation'),
+              child: Text(AppLocalizations.of(context)!.translate("RPaddButton")!),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               ),
@@ -238,4 +230,24 @@ class ReservationPageState extends State<ReservationPage> {
   void navigateToRL(){
     Navigator.pushNamed(context,'/reservation');
   }
+}
+
+void showTranslateButton(){
+  //alert dialog which has three button of the languages
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Choose Language:'),
+      content: const Text(''),
+      actions: <Widget>[
+        //button for french
+        FilledButton(onPressed:() {
+          MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+        ElevatedButton(onPressed:(){
+          MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+        ElevatedButton(onPressed:(){
+          MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+      ],
+    ),
+  );
 }
