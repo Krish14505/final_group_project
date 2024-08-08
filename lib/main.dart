@@ -74,8 +74,7 @@ class MyAppState extends State<MyApp> {
         "/reservation": (context) => ReservationList(),
 
         //add other pages that you have made.
-
-
+        
       },
       initialRoute: '/reservationpage',
       title: 'Home page',
@@ -166,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ///Function that redirects to register page.
   void reservationDirector() {
-    Navigator.pushNamed(context, '/reservationpage');
+    Navigator.pushNamed(context, '/reservation');
     }
 
 }
