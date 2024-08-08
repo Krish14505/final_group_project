@@ -27,5 +27,5 @@ abstract class CustomerDatabase extends FloorDatabase {
   ReservationDAO get getReservationDAO;
 
   //get the interface ready to database
-  FlightsDAO get flightsDAO; // function to establish the connection.
+  FlightsDAO get getflightsDAO; // function to establish the connection.
 }

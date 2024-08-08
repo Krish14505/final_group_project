@@ -10,8 +10,8 @@ class Flight{
   final int flight_id;
   final String destination;
   final String source;
-  final int departure;
-  final int arrival;
+  final String departure;
+  final String arrival;
 
   Flight( this.flight_id, this.destination, this.source, this.arrival, this.departure){
     if(flight_id >= ID){

@@ -1,5 +1,9 @@
+
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/airplane.dart';
 
 import 'CustomerDatabase.dart';
 import 'Flight.dart';
@@ -20,166 +24,155 @@ class FlightListPage extends StatefulWidget{
 class flightListPageState extends State<FlightListPage>{
 
   late FlightsDAO flightsDAO;
-  late Future<List<Flight>> flights;
-  late List<Flight> flightsNow;
+  static List<Flight> flightList = [ ];
 
-  bool addMode = true;
-  int buttonCount = 0;
+
 
   late int selected;
-  final TextEditingController destinationController = TextEditingController();
-  final TextEditingController sourceController = TextEditingController();
-  final TextEditingController departureController = TextEditingController();
-  final TextEditingController arrivalController = TextEditingController();
+  late TextEditingController _destinationController ;
+  late TextEditingController _sourceController ;
+  late TextEditingController _departureController ;
+  late TextEditingController _arrivalController ;
 
+  //use the encrypted shared preferences
+  late EncryptedSharedPreferences savedFlight;
+
+  @override
+  void dispose() {
+    _destinationController = TextEditingController();
+    _sourceController = TextEditingController();
+    _departureController = TextEditingController();
+    _arrivalController = TextEditingController();
+    super.dispose();
+
+  }
 
   @override
   void initState() {
     super.initState();
-    flights = initializeDatabase();
+    _destinationController = TextEditingController();
+    _sourceController = TextEditingController();
+    _departureController = TextEditingController();
+    _arrivalController  =TextEditingController();
 
-  }
-
-  Future<List<Flight>> initializeDatabase() async {
-    final database = await $FloorCustomerDatabase.databaseBuilder("app_database.db").build();
-    flightsDAO = database.flightsDAO;
-    Future<List<Flight>> fs = flightsDAO.getAllFlights();
-    flightsNow = await fs;
-    return fs;
-  }
-
-  ElevatedButton makeFlightButton(Flight flight){
-
-    return ElevatedButton(
-      onPressed: () {
-        addMode = false;
-        selected = buttonCount++;
-        setState(() {});
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero, // Square edges
-        ),
-        minimumSize: Size(double.infinity, 50), // Make button long
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Destination: ${flight.destination}  Source: ${flight.source}',
-            textAlign: TextAlign.left,
-          ),
-          Text(
-            'Departure: ${flight.departure}  Arrival: ${flight.arrival}',
-            textAlign: TextAlign.left,
-          ),
-        ],
-      ),
-    );
-  }
-
-
-void addFlight() async{
-    Flight f = Flight(Flight.ID,destinationController.text,sourceController.text,
-        int.parse(arrivalController.text),int.parse(departureController.text));
-    flightsDAO.addFlight(f);
-    flightsNow.add(f);
-    setState(() {});
-}
-
-void removeFlight() async{
-    flightsDAO.deleteFlight(flightsNow.elementAt(selected));
-    flightsNow.removeAt(selected);
-    setState(() {});
-}
-
-void updateFlight() async{
-    int id = flightsNow.elementAt(selected).flight_id;
-    flightsDAO.deleteFlight(flightsNow.elementAt(selected));
-    Flight f = Flight(id,destinationController.text,sourceController.text,
-        int.parse(arrivalController.text),int.parse(departureController.text));
-    flightsDAO.addFlight(f);
-    flightsNow.removeAt(selected);
-    flightsNow.insert(selected, f);
-    setState(() {});
-}
-
-Row getButtons() {
-    if(addMode){
-      return Row(
-        children: [
-          ElevatedButton(onPressed:() {
-            addFlight();
-            }, child: Text("Add"))
-        ],
+    //pending the database  thing
+    final migration3to4 = Migration(3, 4, (database) async {
+      await database.execute(
+        "CREATE TABLE IF NOT EXISTS `Flights` (`flight_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `destination` TEXT, `source` TEXT, `departure` TEXT, `arrival` TEXT)",
       );
-    }
-    return Row(
-      children: [
-        ElevatedButton(onPressed: (){
-          updateFlight();
-          }, child: Text("Update")),
-        ElevatedButton(onPressed: (){
-          removeFlight();
-          }, child: Text("Delete"))
-      ],
-    );
-}
+    });
+
+    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration3to4]).build().then((database) {
+        flightsDAO = database.getflightsDAO;
+
+        flightsDAO.getAllFlights().then((listofFlights) {
+          flightList.addAll(listofFlights);
+        });
+    });
+
+    savedFlight = EncryptedSharedPreferences();
+
+    savedData();
+
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
-        title: Text(widget.title,style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: destinationController,
-            decoration: InputDecoration(
-              hintText: "somewhere",
+
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 20,),
+            Text("Flight Registration",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.airplane_ticket)),
+                //column for the other field
+                Container(
+                  width: 300, // Adjust the width as needed
+                  padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Optional: Add background color
+                    borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                  ),
+                  child: TextField(controller: _destinationController,
+                      decoration: InputDecoration(
+                          hintText:"Please enter the destination",
+                          border: OutlineInputBorder(),
+                          labelText: "destination"
+                      )),
+                ),
+              ],
             ),
-          ),
-          TextField(
-            controller: sourceController,
-            decoration: InputDecoration(
-              hintText: "somewhere else",
+
+            //second TextField
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.airplane_ticket)),
+                //column for the other field
+                Container(
+                  width: 300, // Adjust the width as needed
+                  padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Optional: Add background color
+                    borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                  ),
+                  child: TextField(controller: _sourceController,
+                      decoration: InputDecoration(
+                          hintText:"please enter source",
+                          border: OutlineInputBorder(),
+                          labelText: "Source"
+                      )),
+                ),
+              ],
             ),
-          ),
-          TextField(
-            controller: arrivalController,
-            decoration: InputDecoration(
-              hintText: "sometime",
+
+            //third Textfield
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.airplane_ticket)),
+                //column for the other field
+                Container(
+                  width: 300, // Adjust the width as needed
+                  padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Optional: Add background color
+                    borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                  ),
+                  child: TextField(controller: _departureController,
+                      decoration: InputDecoration(
+                          hintText:"please enter the departure",
+                          border: OutlineInputBorder(),
+                          labelText: "departure"
+                      )),
+                ),
+              ],
             ),
-          ),
-          TextField(
-            controller: departureController,
-            decoration: InputDecoration(
-              hintText: "sometime earlier",
-            ),
-          ),
-          getButtons(),
-      FutureBuilder<List<Flight>>(
-        future: flights,
-        builder: (BuildContext context, AsyncSnapshot<List<Flight>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            return Wrap(
-              spacing: 8.0, // Space between buttons
-              runSpacing: 4.0, // Space between lines
-              children: snapshot.data!.map((flight) => makeFlightButton(flight)).toList(),
-            );
-          } else {
-            return Text('No flights available');
-          }
-        },
-      ),
-        ],
+
+
+
+
+
+          ],
+        ),
       ),
     );
-  }}
+  }
+
+
+  }
