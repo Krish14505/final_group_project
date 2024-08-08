@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-import 'CustomerDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
 import 'ReservationPage.dart';
@@ -48,7 +47,7 @@ class ReservationListState extends State<ReservationList> {
     });
 
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
       var reservationDAO = database.getReservationDAO;
       reservationDAO.getAllReservations().then((listofReservation) {
         reservationList.addAll(listofReservation);

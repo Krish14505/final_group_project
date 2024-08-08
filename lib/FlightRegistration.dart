@@ -3,9 +3,6 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/airplane.dart';
-
-import 'CustomerDatabase.dart';
 import 'Flight.dart';
 import 'FlightsDAO.dart';
 
@@ -63,7 +60,7 @@ class flightListPageState extends State<FlightListPage>{
     });
 
 
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration3to4]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration3to4]).build().then((database) {
         flightsDAO = database.getFlightDAO;
 
         flightsDAO.getAllFlights().then((listofFlights) {

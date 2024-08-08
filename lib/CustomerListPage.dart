@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'Customer.dart';
 import 'CustomerDAO.dart';
-import 'CustomerDatabase.dart';
 import 'Customer_Registration.dart';
 
 /**

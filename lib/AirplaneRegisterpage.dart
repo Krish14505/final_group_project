@@ -2,7 +2,6 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/CustomerDatabase.dart';
 
 import 'AppLocalizations.dart';
 import 'airplane.dart';
@@ -70,7 +69,7 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
       );
     });
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
       airplanedao = database.getAirplaneDAO; // instantiate the database object
       //fetch the customer from the customerList and put all into the database
       airplanedao.getAllAirPlanes().then((listOfAirplanes) {

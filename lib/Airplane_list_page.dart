@@ -1,7 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'AirplaneRegisterpage.dart';
-import 'CustomerDatabase.dart';
 import 'airplane.dart';
 import 'airplane_dao.dart';
 
@@ -45,7 +44,7 @@ class AirplaneListPageState extends State<AirplaneListPage> {
     });
 
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
       AirplaneDAO = database.getAirplaneDAO; // instantiate the database object
       AirplaneDAO.getAllAirPlanes().then((listOfAirplanes) {
         airplaneLists.addAll(listOfAirplanes);

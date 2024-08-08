@@ -7,7 +7,6 @@ import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AppLocalizations.dart';
-import 'CustomerDatabase.dart';
 import 'main.dart';
 
 //Customer Registration page
@@ -56,7 +55,7 @@ static List<Customer> customerLists= [];
 
 
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       customerdao = database.getCustomerDAO; // instantiate the database object
 
       //fetch the customer from the customerList and put all into the database
