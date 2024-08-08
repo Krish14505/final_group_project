@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Reservation.dart';
 import 'package:group_project/ReservationDAO.dart';
-
+import 'package:group_project/CustomerDAO.dart';
+import 'package:group_project/CustomerDatabase.dart';
+import 'CustomerDAO.dart';
+import 'CustomerDAO.dart';
 import 'ReservationDB.dart';
 
 class ReservationPage extends StatefulWidget {
@@ -30,15 +33,12 @@ class ReservationPageState extends State<ReservationPage> {
 
 
   void loadData() async {
-    customers = ['Krish', 'Evan', 'Yazid', 'Himanshu'];
-    flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
-
-    final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
-    reservationList = await database.reservationDao.getAllReservations();
-
+    //final Cdatabase = await CustomerDatabase.databaseBuilder('customer_db').build();
+    //final Fdatabase = await FlightDatabase.databaseBuilder('flight_db').build();
+    //customers = await Cdatabase.customerDao.getAllCustomers();
+    //flights = await Fdatabase.flightDao.getAllFlights();
     setState(() {});
   }
-
 
   void _addReservation() async {
     if (selectedCustomer == null || selectedFlight == null || _reservationDate == null) {
