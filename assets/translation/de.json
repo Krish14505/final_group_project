@@ -31,5 +31,6 @@
   "RLdeptimeHT": "Abflugzeit",
   "RLdeptimeLT": "Abflugzeit",
   "RLarrtimeHT": "Ankunftszeit",
-  "RLarrtimeLT": "Ankunftszeit"
+  "RLarrtimeLT": "Ankunftszeit",
+  "reservation_page"         : "Reservierungsseite"
 }

@@ -1,10 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
-import 'AppLocalizations.dart';
-import 'CustomerListPage.dart';
-import 'Customer_Registration.dart';
+import 'AppLocalization.dart';
 import 'ReservationList.dart';
 import 'ReservationPage.dart';
 
@@ -24,7 +23,6 @@ class MyApp extends StatefulWidget {
 
   //override the method
   @override
-
   State<MyApp> createState() {
     return MyAppState();
   }
@@ -71,12 +69,10 @@ class MyAppState extends State<MyApp> {
       routes: {
         //it will be sorted & defined as key and value pairs
 
+        '/homePage': (context) => MyHomePage(title: "Aiplane Registration ",),
         '/homePage': (context) => MyHomePage(title:AppLocalizations.of(context)!.translate("application_Title")!,),
-        '/registerPage': (context) => CustomerRegistration(),
-        '/listPage': (context) => CustomerListPage(),
         '/reservationpage': (context) => ReservationPage(),
         "/reservation": (context) => ReservationList(),
-
 
         //add other pages that you have made.
 
@@ -92,7 +88,6 @@ class MyAppState extends State<MyApp> {
 
     );
   }
-
 }
 
 
@@ -109,15 +104,7 @@ class MyHomePage extends StatefulWidget {
 
 ///class that contains four button which redirects different pages
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  void navigateToRP(){
-    Navigator.pushNamed(context,'/reservation');
-  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -135,27 +122,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       body: Center(
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
               //1. Button for the customer Register Button.
               //change the button Text language when altering language
-              ElevatedButton(onPressed: CustomerregistrationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
-              SizedBox(height: 10,),
-
-              //4.button for Airplane List
-              ElevatedButton(onPressed:airplaneRegisterDirector , child: Text(AppLocalizations.of(context)!.translate("airplane_list")!)),
-              SizedBox(height: 10,),
-
-
-              //2.Button for Reservation Page
-              ElevatedButton(onPressed:reservationDirector, child: Text(AppLocalizations.of(context)!.translate("reservation_page")!)),
-              SizedBox(height: 10,),
-
-              //3. button for Flights Page
-              ElevatedButton(onPressed: () {  }, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
+              ElevatedButton(onPressed: reservationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
               SizedBox(height: 10,),
 
 
@@ -163,13 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           )
 
-
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
     );
   }
 
@@ -198,18 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   ///Function that redirects to register page.
-  void CustomerregistrationDirector() {
-    Navigator.pushNamed(context, '/registerPage');
-  }
-
-  ///function that redirects to register page for airplanes
-  void airplaneRegisterDirector() {
-    Navigator.pushNamed(context, '/airplaneRegister');
-  }
-
   void reservationDirector() {
     Navigator.pushNamed(context, '/reservationpage');
-  }
-
+    }
 
 }

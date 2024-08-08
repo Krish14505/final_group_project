@@ -31,5 +31,6 @@
   "RLdeptimeHT": "Departure Time",
   "RLdeptimeLT": "Departure Time",
   "RLarrtimeHT": "Arrival Time",
-  "RLarrtimeLT": "Arrival Time"
+  "RLarrtimeLT": "Arrival Time",
+  "reservation_page"         :  "Reservation Page"
 }

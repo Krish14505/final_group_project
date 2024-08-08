@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/ReservationDB.dart';
 
-import 'AppLocalizations.dart';
-import 'CustomerDAO.dart';
-import 'CustomerDatabase.dart';
+import 'AppLocalization.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
 import 'main.dart';
@@ -19,7 +17,6 @@ class ReservationPage extends StatefulWidget {
 
 class ReservationPageState extends State<ReservationPage> {
   late ReservationDAO reservationDAO;
-  late CustomerDAO customerDAO;
   static List<Reservation> reservationList = [];
 
   String? selectedCustomer;
