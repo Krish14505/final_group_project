@@ -1,11 +1,9 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/Reservation.dart';
-import 'package:group_project/ReservationDAO.dart';
-import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/CustomerDatabase.dart';
-import 'CustomerDAO.dart';
-import 'CustomerDAO.dart';
+
+import 'Reservation.dart';
+import 'ReservationDAO.dart';
 import 'ReservationDB.dart';
 
 class ReservationPage extends StatefulWidget {
@@ -24,29 +22,42 @@ class ReservationPageState extends State<ReservationPage> {
   DateTime? _reservationDate;
   late TextEditingController _reservationName;
 
+  //Created the encrypted Shared preferences variable
+  late EncryptedSharedPreferences savedReservation;
+
   @override
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
     loadData();
+
+    //initialize the SavedReservation object
+    savedReservation = EncryptedSharedPreferences();
+
+    //savedReservation() function called
+    savedReservationData();
   }
 
 
   void loadData() async {
-    //final Cdatabase = await CustomerDatabase.databaseBuilder('customer_db').build();
-    //final Fdatabase = await FlightDatabase.databaseBuilder('flight_db').build();
-    //customers = await Cdatabase.customerDao.getAllCustomers();
-    //flights = await Fdatabase.flightDao.getAllFlights();
+    customers = ['Krish', 'Evan', 'Yazid', 'Himanshu'];
+    flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
+
+    final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
+    reservationList = await database.reservationDao.getAllReservations();
+
     setState(() {});
   }
+
 
   void _addReservation() async {
     if (selectedCustomer == null || selectedFlight == null || _reservationDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please fill in all fields')),
       );
-      return;
     }
+    //add the reservationName to the encryptedSharedPreferences file
+    sendReservationData();
 
     final reservation = Reservation(
       reservationId: 0,
@@ -202,12 +213,6 @@ class ReservationPageState extends State<ReservationPage> {
                     title: Text(reservation.reservationName),
                     subtitle: Text('Customer: ${reservation.customerName}, Flight: ${reservation.flightName}'),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReservationDetailPage(reservation: reservation),
-                        ),
-                      );
                     },
                   );
                 },
@@ -218,34 +223,21 @@ class ReservationPageState extends State<ReservationPage> {
       ),
     );
   }
-}
 
-class ReservationDetailPage extends StatelessWidget {
-  final Reservation reservation;
+  //Function to save the reservation data
 
-  ReservationDetailPage({required this.reservation});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Reservation Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Reservation Name: ${reservation.reservationName}', style: TextStyle(fontSize: 20)),
-            SizedBox(height: 10),
-            Text('Customer: ${reservation.customerName}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 10),
-            Text('Flight: ${reservation.flightName}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 10),
-            Text('Reservation Date: ${reservation.reservationDate.toLocal().toString().split(' ')[0]}', style: TextStyle(fontSize: 18)),
-          ],
-        ),
-      ),
-    );
+  void sendReservationData(){
+    savedReservation.setString("reservation_Name", _reservationName.value.text);
   }
+
+//put the previously used customer value to the TextField when loading the page second time.
+  void savedReservationData() {
+    savedReservation.getString("reservation_Name").then((encryptedReservation) {
+      if(encryptedReservation !=null){
+        _reservationName.text = encryptedReservation;
+      }
+
+      });
+  }
+
 }
