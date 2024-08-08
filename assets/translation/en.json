@@ -15,22 +15,5 @@
   "RPresnameL": "Reservation Name",
   "RPresdateH": "Enter Reservation Date",
   "RPresdateL": "Reservation Date",
-  "RPaddButton": "Add Reservation",
-  "RLtitle": "Reservation List",
-  "RLelT": "*There is no reservation added yet*",
-  "RLdetformAlert": "Nothing is selected",
-  "RLdetformInfo": "Reservation Details",
-  "RLcnameHT": "Customer Name",
-  "RLcnameLT": "Customer Name",
-  "RLfnameHT": "Flight Name",
-  "RLfnameLT": "Flight Name",
-  "RLdepcityHT": "Departure City",
-  "RLdepcityLT": "Departure City",
-  "RLdestcityHT": "Destination City",
-  "RLdescityLT": "Destination City",
-  "RLdeptimeHT": "Departure Time",
-  "RLdeptimeLT": "Departure Time",
-  "RLarrtimeHT": "Arrival Time",
-  "RLarrtimeLT": "Arrival Time",
-  "reservation_page"         :  "Reservation Page"
+  "RPaddButton": "Add Reservation"
 }

@@ -69,8 +69,7 @@ class MyAppState extends State<MyApp> {
       routes: {
         //it will be sorted & defined as key and value pairs
 
-        '/homePage': (context) => MyHomePage(title: "Aiplane Registration ",),
-        '/homePage': (context) => MyHomePage(title:AppLocalizations.of(context)!.translate("application_Title")!,),
+
         '/reservationpage': (context) => ReservationPage(),
         "/reservation": (context) => ReservationList(),
 
@@ -78,7 +77,7 @@ class MyAppState extends State<MyApp> {
 
 
       },
-      initialRoute: '/homePage',
+      initialRoute: '/reservationpage',
       title: 'Home page',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

@@ -33,16 +33,11 @@ class ReservationPageState extends State<ReservationPage> {
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
-
+    _reservationDate = TextEditingController();
     //initialize the SavedReservation object
     savedReservation = EncryptedSharedPreferences();
 
-    //add the migration to keep the reservation table in the same customerDatabase
-    final migration2to3 = Migration(2, 3, (database) async{
-      await database.execute(
-          "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
-      );
-    });
+
 
     //creating the database connection
     $FloorReservationDB.databaseBuilder("app_database.db").build().then((database) {
@@ -54,6 +49,15 @@ class ReservationPageState extends State<ReservationPage> {
     //savedReservation() function called
     savedReservationData();
   }
+
+@override
+  void dispose() {
+    _reservationName.dispose();
+super.dispose();
+    _reservationDate.dispose();
+
+  }
+
   void loadData() async {
     customersList = ['Krish', 'Evan', 'Yazid', 'Himanshu'];
     flightsList = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
@@ -67,7 +71,7 @@ class ReservationPageState extends State<ReservationPage> {
           title:  Text(AppLocalizations.of(context)!.translate("RPalertDioalogT")! ),
           content: Text(AppLocalizations.of(context)!.translate("RPalertDioalogC")!),
           actions: <Widget>[
-            ElevatedButton(onPressed: () => Navigator.pop(context, AppLocalizations.of(context)!.translate("about_regi_description")!),
+            ElevatedButton(onPressed: () => Navigator.pop(context),
               child:  Text( AppLocalizations.of(context)!.translate("ok")!),
             )],
         ),
@@ -123,7 +127,7 @@ class ReservationPageState extends State<ReservationPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(AppLocalizations.of(context)!.translate("ok")!),
+                      child: Text("OK"),
                     )
                   ],
                 ),
@@ -221,7 +225,7 @@ class ReservationPageState extends State<ReservationPage> {
 
     savedReservation.getString("reservation_Date").then((encryptedReservationDate) {
       if(encryptedReservationDate !=null){
-        _reservationName.text = encryptedReservationDate;
+        _reservationDate.text = encryptedReservationDate;
       }
 
     });
@@ -239,13 +243,9 @@ void showTranslateButton(){
       title: const Text('Choose Language:'),
       content: const Text(''),
       actions: <Widget>[
-        //button for french
-        FilledButton(onPressed:() {
-          MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
-        ElevatedButton(onPressed:(){
-          MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
-        ElevatedButton(onPressed:(){
-          MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ElevatedButton(onPressed: () {  }, child: Text("German")),
+        ElevatedButton(onPressed: () {  },child: Text("english"),),
+        ElevatedButton(onPressed: () { }, child: Text("French"))
       ],
     ),
   );
