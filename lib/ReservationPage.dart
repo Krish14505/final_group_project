@@ -117,10 +117,10 @@ class ReservationPageState extends State<ReservationPage> {
                         '- Press the "Add Reservation" button to add the reservation to the list.'),
                         SizedBox(height: 10),
                         Text('2. Viewing Reservation Details:\n'
-                         '- Tap on any reservation in the list to view its details.\n'),
+                         '- Tap on any reservation in the list to view its details.'),
                         SizedBox(height: 10),
                         Text('3. Copying Previous Customer Information:\n'
-                        '- When adding a new customer, you can choose to copy the information from the previous customer.\n'),
+                        '- When adding a new customer, you can choose to copy the information from the previous customer.'),
                         SizedBox(height: 10),
                         Text('4. Navigation:\n'
                        '- Use the back button or the app\'s navigation controls to go back to the home page or other sections of the app.'),
