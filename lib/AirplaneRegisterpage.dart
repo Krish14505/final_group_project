@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/CustomerDatabase.dart';
 
+import 'AppLocalizations.dart';
 import 'airplane.dart';
 import 'airplane_dao.dart';
+import 'main.dart';
 
 ///This is the Airplane the register page where the user register all the airplanes
 
@@ -91,6 +93,11 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          //implement a button to change the language from the registration page.
+          OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.language_outlined), style: OutlinedButton.styleFrom(side: BorderSide.none, ),),
+
+        ],
           backgroundColor: Colors.cyan,
           title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold))
       ),
@@ -99,7 +106,7 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 20),
-            Text("Airplane Registration",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
+            Text(AppLocalizations.of(context)!.translate("title_airplane_register")!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
 
             //First row of the text field for the airplanetype
             Row(
@@ -331,6 +338,28 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
     _airplaneType.text = "";
     _number_passenger.text = "";
     _maximum_speed.text = "";
-    _distance.text="";}
+    _distance.text="";
+  }
+
+  //
+  void showTranslateButton(){
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          FilledButton(onPressed:() {
+            MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ],
+      ),
+    );
+  }
 
 }

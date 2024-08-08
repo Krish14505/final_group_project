@@ -24,6 +24,7 @@
   "warning_message_alert_dialog":"Veuillez remplir tous les champs",
   "french_key"                 : "Français",
   "german_key"                 : "Allemand",
-  "english_key"                : "Anglais"
+  "english_key"                : "Anglais",
+  "title_airplane_register"    : ""
 
 }

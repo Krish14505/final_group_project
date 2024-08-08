@@ -24,5 +24,6 @@
   "warning_message_alert_dialog" : "Please Fill out all the fields.",
   "french_key"                 : "French",
   "german_key"                 : "German",
-  "english_key"                : "English"
+  "english_key"                : "English",
+  "title_airplane_register"    : "Airplane Registration"
 }
