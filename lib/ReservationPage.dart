@@ -86,13 +86,6 @@ class ReservationPageState extends State<ReservationPage> {
     }
 
 
-
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Reservation added')),
-    );
-
-
     // Reload the data to update the ListView
     loadData();
   }

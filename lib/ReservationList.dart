@@ -29,9 +29,9 @@ class ReservationListState extends State<ReservationList> {
   late TextEditingController _customerName;
   late TextEditingController _flightName;
   late TextEditingController _reservationDate;
-  late TextEditingController _depatureCity;
+  late TextEditingController _departureCity;
   late TextEditingController _destinationCity;
-  late TextEditingController _depatureTime;
+  late TextEditingController _departureTime;
   late TextEditingController _arrivalTime;
 
 
@@ -51,6 +51,13 @@ class ReservationListState extends State<ReservationList> {
   @override
   void dispose() {
     _reservationName.dispose();
+    _customerName.dispose();
+    _flightName.dispose();
+    _reservationDate.dispose();
+    _departureCity.dispose();
+    _destinationCity.dispose();
+    _departureTime.dispose();
+    _arrivalTime.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -94,7 +101,7 @@ class ReservationListState extends State<ReservationList> {
       child:Column(
         children: [
           if(reservationList.isEmpty)
-      Text("*There is no reservation added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+      Text("*There is no reservation added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))
     else
             Flexible(
               child: ListView.builder(
@@ -130,7 +137,7 @@ class ReservationListState extends State<ReservationList> {
   }
   Widget ReservationDetailsWithForm(){
     if (selectedReservation == null){
-      return Text("Nothing is selected ");
+      return Text("Nothing is selected");
     } else {
       return SingleChildScrollView(
         child: Column(
@@ -203,11 +210,11 @@ class ReservationListState extends State<ReservationList> {
                       10.0), // Optional: Add border radius
 
                 ),
-                child: TextField(controller: _depatureCity,
+                child: TextField(controller: _departureCity,
                     decoration: InputDecoration(
-                        hintText: "Depature City",
+                        hintText: "Departure City",
                         border: OutlineInputBorder(),
-                        labelText: "Depature City"
+                        labelText: "Departure City"
                     )),
               ),
 
@@ -259,7 +266,7 @@ class ReservationListState extends State<ReservationList> {
                       10.0), // Optional: Add border radius
 
                 ),
-                child: TextField(controller: _depatureTime,
+                child: TextField(controller: _departureTime,
                     decoration: InputDecoration(
                         hintText: "Depature Time",
                         border: OutlineInputBorder(),
