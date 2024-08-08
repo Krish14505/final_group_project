@@ -12,5 +12,4 @@ abstract class CustomerDatabase extends FloorDatabase {
 
   //get the interface ready to database
   CustomerDAO get getCustomerDAO; // function to establish the connection.
-
 }

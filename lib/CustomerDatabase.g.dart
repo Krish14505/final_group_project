@@ -33,7 +33,6 @@ class $FloorCustomerDatabase {
 
 class _$CustomerDatabaseBuilder implements $CustomerDatabaseBuilderContract {
   _$CustomerDatabaseBuilder(this.name);
-
   final String? name;
 
   final List<Migration> _migrations = [];

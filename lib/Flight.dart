@@ -4,6 +4,8 @@ import 'package:floor/floor.dart';
 @entity
 class Flight{
 
+  static int ID = 0;
+
   @primaryKey
   final int flight_id;
   final String destination;
@@ -11,7 +13,11 @@ class Flight{
   final int departure;
   final int arrival;
 
-  Flight( this.flight_id, this.destination, this.source, this.arrival, this.departure);
+  Flight( this.flight_id, this.destination, this.source, this.arrival, this.departure){
+    if(flight_id >= ID){
+      ID = flight_id + 1;
+    }
+  }
 
 
 

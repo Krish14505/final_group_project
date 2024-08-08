@@ -65,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(onPressed: registrationDirector, child: Text("Registration Page"),),
+              ElevatedButton(onPressed: flightDirector, child: Text("Flight List Page"),),
             ],
           )
 
@@ -75,5 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void registrationDirector() {
     Navigator.pushNamed(context, '/registerPage');
+  }
+  void flightDirector(){
+    Navigator.pushNamed(context, '/flightPage');
   }
 }
