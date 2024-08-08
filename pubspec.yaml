@@ -35,7 +35,8 @@ dependencies:
   flutter_secure_storage: ^7.0.1
   flutter_test:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
 
 
 

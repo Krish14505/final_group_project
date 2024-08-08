@@ -1,11 +1,15 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/ReservationDB.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerDAO.dart';
+import 'CustomerDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
-import 'ReservationDB.dart';
+import 'main.dart';
 
 class ReservationPage extends StatefulWidget {
   @override
@@ -15,12 +19,13 @@ class ReservationPage extends StatefulWidget {
 
 class ReservationPageState extends State<ReservationPage> {
   late ReservationDAO reservationDAO;
+  late CustomerDAO customerDAO;
   static List<Reservation> reservationList = [];
 
   String? selectedCustomer;
   String? selectedFlight;
-  List<String> customers = [];
-  List<String> flights = [];
+  List<String> customersList = [];
+  List<String> flightsList = [];
   late TextEditingController _reservationDate;
   late TextEditingController _reservationName;
 
@@ -31,44 +36,49 @@ class ReservationPageState extends State<ReservationPage> {
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
-    loadData();
 
     //initialize the SavedReservation object
     savedReservation = EncryptedSharedPreferences();
 
+    //add the migration to keep the reservation table in the same customerDatabase
+    final migration2to3 = Migration(2, 3, (database) async{
+      await database.execute(
+          "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
+      );
+    });
+
+    //creating the database connection
+    $FloorReservationDB.databaseBuilder("app_database.db").build().then((database) {
+      reservationDAO = database.reservationDao;
+      reservationDAO.getAllReservations().then((listofReservation) {
+        reservationList.addAll(listofReservation);
+      });
+    });
     //savedReservation() function called
     savedReservationData();
   }
-
-
   void loadData() async {
-    customers = ['Krish','Evan','Yazid','Himanshu'];
-    flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
-
-    final database = await $FloorReservationDB.databaseBuilder('reservation_database.db').build();
-    reservationList = await database.reservationDao.getAllReservations();
-
-    setState(() {});
+    customersList = ['Krish', 'Evan', 'Yazid', 'Himanshu'];
+    flightsList = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
   }
 
-
   void _addReservation() async {
-          if(_reservationDate ==  null || _reservationName.value.text == null ) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Missing Fields!'),
-            content: const Text('Please Fill out all the fields.'),
-            actions: <Widget>[
-              ElevatedButton(onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),),
-            ],
-          ),
-        );
-      }
+    if(_reservationDate ==  null || _reservationName.value.text == null ) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title:  Text(AppLocalizations.of(context)!.translate("RPalertDioalogT")! ),
+          content: Text(AppLocalizations.of(context)!.translate("RPalertDioalogC")!),
+          actions: <Widget>[
+            ElevatedButton(onPressed: () => Navigator.pop(context, AppLocalizations.of(context)!.translate("about_regi_description")!),
+              child:  Text( AppLocalizations.of(context)!.translate("ok")!),
+            )],
+        ),
+      );
+    }
     //each of fields is filled then the following:
     else {
-      var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
+      var snackBar = SnackBar( content: Text(AppLocalizations.of(context)!.translate("RPsuccussMsg")!, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       ///navigate to the list page
       Navigator.pushNamed(context, "/reservationList"); //redirect to the home page
@@ -79,44 +89,35 @@ class ReservationPageState extends State<ReservationPage> {
       reservationList.add(reservation);
 
       //invoking a method to insert the new customer into the table
-      final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
-      await database.reservationDao.insertReservation(reservation);
-    //add the reservationName to the encryptedSharedPreferences file
-    sendReservationData();
+      reservationDAO.insertReservation(reservation);
+      //add the reservationName to the encryptedSharedPreferences file
+      sendReservationData();
     }
 
-
-    // Reload the data to update the ListView
-    loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reservation Page'),
+        title: Text(AppLocalizations.of(context)!.translate("RPtitle")!),
         actions: [
           IconButton(
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Instructions'),
-                  content: const SingleChildScrollView(
+                  title: Text(AppLocalizations.of(context)!.translate("RPinstructionT")!),
+                  content: SingleChildScrollView(
                     child: ListBody(
                       children: <Widget>[
-                        Text('1. Adding a Reservation:\n'
-                        '- Enter the name of the reservation in the text field provided.\n'
-                        '- Press the "Add Reservation" button to add the reservation to the list.'),
+                        Text(AppLocalizations.of(context)!.translate("RPaddResIns")!),
                         SizedBox(height: 10),
-                        Text('2. Viewing Reservation Details:\n'
-                         '- Tap on any reservation in the list to view its details.'),
+                        Text(AppLocalizations.of(context)!.translate("RPviewResIns")!),
                         SizedBox(height: 10),
-                        Text('3. Copying Previous Customer Information:\n'
-                        '- When adding a new customer, you can choose to copy the information from the previous customer.'),
+                        Text(AppLocalizations.of(context)!.translate("RPcopyIns")!),
                         SizedBox(height: 10),
-                        Text('4. Navigation:\n'
-                       '- Use the back button or the app\'s navigation controls to go back to the home page or other sections of the app.'),
+                        Text(AppLocalizations.of(context)!.translate("RPnavIns")!),
                       ],
                     ),
                   ),
@@ -125,7 +126,7 @@ class ReservationPageState extends State<ReservationPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text("OK"),
+                      child: Text(AppLocalizations.of(context)!.translate("ok")!),
                     )
                   ],
                 ),
@@ -142,13 +143,13 @@ class ReservationPageState extends State<ReservationPage> {
           children: [
             DropdownButton<String>(
               value: selectedCustomer,
-              hint: Text('Select Customer'),
+              hint: Text(AppLocalizations.of(context)!.translate("RPddmCN")!),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedCustomer = newValue;
                 });
               },
-              items: customers.map<DropdownMenuItem<String>>((String value) {
+              items: customersList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -158,13 +159,13 @@ class ReservationPageState extends State<ReservationPage> {
             SizedBox(height: 16),
             DropdownButton<String>(
               value: selectedFlight,
-              hint: Text('Select Flight'),
+              hint: Text(AppLocalizations.of(context)!.translate("RPddmFN")!),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedFlight = newValue;
                 });
               },
-              items: flights.map<DropdownMenuItem<String>>((String value) {
+              items: flightsList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -175,9 +176,9 @@ class ReservationPageState extends State<ReservationPage> {
             TextField(
               controller: _reservationName,
               decoration: InputDecoration(
-                hintText: "Enter Reservation Name",
+                hintText: AppLocalizations.of(context)!.translate("RPresnameH"),
                 border: OutlineInputBorder(),
-                labelText: "Reservation Name",
+                labelText: AppLocalizations.of(context)!.translate("RPresnameL"),
               ),
               maxLength: 30,
             ),
@@ -185,16 +186,16 @@ class ReservationPageState extends State<ReservationPage> {
             TextField(
               controller: _reservationDate,
               decoration: InputDecoration(
-                hintText: "Enter Reservation Date",
+                hintText: AppLocalizations.of(context)!.translate("RPresdateH"),
                 border: OutlineInputBorder(),
-                labelText: "Reservation Date",
+                labelText: AppLocalizations.of(context)!.translate("RPresdateL"),
               ),
               maxLength: 30,
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _addReservation,
-              child: Text('Add Reservation'),
+              child: Text(AppLocalizations.of(context)!.translate("RPaddButton")!),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               ),
@@ -209,6 +210,7 @@ class ReservationPageState extends State<ReservationPage> {
 
   void sendReservationData(){
     savedReservation.setString("reservation_Name", _reservationName.value.text);
+    savedReservation.setString("reservation_Date", _reservationDate.value.text);
   }
 
 //put the previously used customer value to the TextField when loading the page second time.
@@ -218,9 +220,38 @@ class ReservationPageState extends State<ReservationPage> {
         _reservationName.text = encryptedReservation;
       }
 
-      });
+    });
+
+    savedReservation.getString("reservation_Date").then((encryptedReservationDate) {
+      if(encryptedReservationDate !=null){
+        _reservationName.text = encryptedReservationDate;
+      }
+
+    });
   }
   void navigateToRL(){
     Navigator.pushNamed(context,'/reservation');
   }
+
+
+void showTranslateButton(){
+  //alert dialog which has three button of the languages
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Choose Language:'),
+      content: const Text(''),
+      actions: <Widget>[
+        //button for french
+        FilledButton(onPressed:() {
+          MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+        ElevatedButton(onPressed:(){
+          MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+        ElevatedButton(onPressed:(){
+          MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+      ],
+    ),
+  );
+}
+
 }
