@@ -7,6 +7,7 @@ import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AppLocalizations.dart';
+import 'ProjectDatabase.dart';
 import 'main.dart';
 
 //Customer Registration page

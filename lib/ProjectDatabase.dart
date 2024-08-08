@@ -12,7 +12,7 @@ import 'ReservationDAO.dart';
 import 'airplane.dart';
 import 'airplane_dao.dart';
 
-part 'CustomerDatabase.g.dart';
+part 'ProjectDatabase.g.dart';
 
 ///Customer Database class extends FloorDatabase
 
