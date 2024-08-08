@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/Customer.dart';
-import 'package:group_project/CustomerDAO.dart';
-import 'package:group_project/Customer_Registration.dart';
 
+import 'Customer.dart';
+import 'CustomerDAO.dart';
 import 'CustomerDatabase.dart';
+import 'Customer_Registration.dart';
 
 /**
  * This customer list page has two pages: first on the left-hand side it has all the customer
@@ -20,21 +20,24 @@ class CustomerListPage extends StatefulWidget {
   }
 }
 
+///CustomerList page state
 class CustomerListPageState extends State<CustomerListPage> {
-  //variables defined
+  /// Customer dao object
   late CustomerDAO customerdao ;
+
+  ///the specific customer
   Customer ? selectedCustomer;
 
+  ///List of Customers from the database
   List<Customer> customerLists = CustomerRegistrationState.customerLists;
-  ///declare all the variables used in the textfield.
+
+  ///declare all the TextField
   late TextEditingController _firstName;
   late TextEditingController _lastName;
   late TextEditingController _email;
   late TextEditingController _phoneNumber;
   late TextEditingController _address;
   late TextEditingController _birthday;
-
-
 
 
   @override
@@ -54,11 +57,10 @@ class CustomerListPageState extends State<CustomerListPage> {
       //fetch the customer from the customerList and put all into the database
       customerdao.getAllCustomers().then((ListOfCustomers) {
         customerLists.addAll(ListOfCustomers); // when loading the page , all the existing customer should be in the list.
+      }); //getAll Customers.
+    }); //FloorCustomerDatabase
 
-      });
-
-    });
-  }
+}
 
   @override
   void dispose() {
@@ -83,7 +85,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     );
   }
 
-  //the widget to return the based on the device mode.
+  ///the widget to return the based on the device mode.
  Widget responsiveLayout() {
     var size = MediaQuery.of(context).size;
     var height = size.height;
@@ -110,7 +112,7 @@ class CustomerListPageState extends State<CustomerListPage> {
  }
 
 
-
+///widget that shows the List of the customers from the Customer table
   Widget ListPage(){
     return Center(
       child: Column(
@@ -158,7 +160,7 @@ class CustomerListPageState extends State<CustomerListPage> {
   }
 
 
-//customerDetailsWithForm() that has the format of registration page but in the TextField values would that of the customer selected.
+///customerDetailsWithForm() that has the format of registration page but in the TextField values would that of the customer selected.
 
 Widget customerDetailsWithForm() {
   if (selectedCustomer == null) {
@@ -361,7 +363,7 @@ Widget customerDetailsWithForm() {
   } // else condition ends..
 } // widget CustomerDetailsWithForm() ends...
 
-  //function to update the customer
+  ///function to update the customer when he click on the update button
   void UpdateCustomer(){
       if(selectedCustomer != null) {
         //creating an instance of the updated customer.
@@ -396,7 +398,8 @@ Widget customerDetailsWithForm() {
       }
   }
 
-  void DeleteCustomer(){
+  ///Function That run when deleting  customer
+  void DeleteCustomer (){
     setState(() {
 
       //delete the customer from the database first

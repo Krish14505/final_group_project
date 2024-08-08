@@ -1,3 +1,4 @@
+
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,15 @@ import 'package:group_project/Customer.dart';
 import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerDatabase.dart';
+import 'main.dart';
 
+//Customer Registration page
+
+///class contains the form for registering customer
 class CustomerRegistration extends StatefulWidget {
+  ///Title of the page
    String  title= "Customer Registration Page" ;
 
   @override
@@ -17,14 +24,16 @@ class CustomerRegistration extends StatefulWidget {
 
 }
 
+///registrationState class
 class CustomerRegistrationState extends State<CustomerRegistration> {
 
-//variables should be defined here.
-//creating the dao object
+///Customer dao object
 late CustomerDAO customerdao ;
+
+///List of Customer
 static List<Customer> customerLists= [];
 
-  ///declare all the variables used in the textfield.
+///Text Editing Controller where user enters required information.
   late TextEditingController _firstName;
   late TextEditingController _lastName;
   late TextEditingController _email;
@@ -32,7 +41,7 @@ static List<Customer> customerLists= [];
   late TextEditingController _address;
   late TextEditingController _birthday;
 
-  //creating a EncryptedSharedPreference Instance;
+  ///an EncryptedSharedPreference Instance to save Customer information in device file explorer;
   late EncryptedSharedPreferences savedCustomer ;
 
   @override
@@ -79,19 +88,40 @@ static List<Customer> customerLists= [];
 
   }
 
+  ///button that shows an alert dialog of how to use the page
+void HelpButton() {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title:  Text( AppLocalizations.of(context)!.translate("about_regi_key")!), // added the internationalization
+      content:  Text(AppLocalizations.of(context)!.translate("about_regi_description")!),
+      actions: <Widget>[
+       ElevatedButton(onPressed: (){ Navigator.pop(context); }, child: const  Text("Ok"))
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
   return Scaffold(
-    appBar: AppBar(backgroundColor: Colors.cyan,title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,),
+    appBar: AppBar(backgroundColor: Colors.cyan,
+                   title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
+                   actions: [
+                     //implement a button to change the language from the registration page.
+                       OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.language_outlined), style: OutlinedButton.styleFrom(side: BorderSide.none, ),),
+
+                     FilledButton(onPressed: HelpButton, child: Icon(Icons.question_mark_sharp)),
+                   ],
+                  ),
     body: SingleChildScrollView (
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
 
           SizedBox(height: 20),
-          Text("Welcome to the Registration Page",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
+          Text(AppLocalizations.of(context)!.translate("welcome_title_registration")!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
 
 
           ///first row for the customer last name and first name.
@@ -111,7 +141,7 @@ static List<Customer> customerLists= [];
                 ),
                 child: TextField(controller: _firstName,
                     decoration: InputDecoration(
-                        hintText:"Enter  First Name",
+                        hintText:AppLocalizations.of(context)!.translate("first_name_text"),
                         border: OutlineInputBorder(),
                         labelText: "First Name"
                     )),
@@ -136,7 +166,7 @@ static List<Customer> customerLists= [];
                 ),
                 child: TextField(controller: _lastName,
                     decoration: InputDecoration(
-                        hintText:"Enter Last Name",
+                        hintText:AppLocalizations.of(context)!.translate("last_name_text"),
                         border: OutlineInputBorder(),
                         labelText: "Last Name"
                     )),
@@ -163,7 +193,7 @@ static List<Customer> customerLists= [];
                   ),
                   child: TextField(controller: _birthday,
                       decoration: InputDecoration(
-                          hintText:"Enter Date Of Birth",
+                          hintText:AppLocalizations.of(context)!.translate("birthday_text"),
                           border: OutlineInputBorder(),
                           labelText: "BirthDate"
                       )),
@@ -185,7 +215,7 @@ static List<Customer> customerLists= [];
                 ),
                 child: TextField(controller: _email,
                     decoration: InputDecoration(
-                        hintText:"Enter Your Email address",
+                        hintText:AppLocalizations.of(context)!.translate("email_text"),
                         border: OutlineInputBorder(),
                         labelText: "Email"
                     )),
@@ -209,7 +239,7 @@ static List<Customer> customerLists= [];
                 ),
                 child: TextField(controller: _phoneNumber,
                     decoration: InputDecoration(
-                        hintText:"Enter phone number ",
+                        hintText:AppLocalizations.of(context)!.translate("phone_text"),
                         border: OutlineInputBorder(),
                         labelText: "PhoneNumber"
                     )),
@@ -232,26 +262,22 @@ static List<Customer> customerLists= [];
                 ),
                 child: TextField(controller: _address,
                     decoration: InputDecoration(
-                        hintText:"Enter Your Address",
+                        hintText:AppLocalizations.of(context)!.translate("address_key"),
                         border: OutlineInputBorder(),
                         labelText: "Address:"
                     )),
               ),
             ],),
           //creating Register button to register the user as the customer
-          SizedBox(
-            width: 300, // Set the width of the button
-            height: 60, // Set the height of the button
-            child:
-            Expanded (
-              flex: 10,
-              child: FilledButton(
-                onPressed: registerCustomer,
-                child: Text("Register", style: TextStyle(fontSize: 20)), // Adjust font size if needed
-              ),
-            )
-            ,
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: FilledButton(
+              onPressed: registerCustomer,
+              child: Text(AppLocalizations.of(context)!.translate("register_btn")!, style: TextStyle(fontSize: 20)),
+            ),
           ),
+
 
 
         ],
@@ -264,6 +290,7 @@ static List<Customer> customerLists= [];
 
   }
 
+  ///function when the user clicks on the register button
   void registerCustomer() {
 
     if(_firstName.value.text ==  ""  || _lastName.value.text == "" || _email.value.text == "" || _phoneNumber.value.text == "" || _birthday.value
@@ -271,8 +298,8 @@ static List<Customer> customerLists= [];
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Incomplete Registration! '),
-          content: const Text('Please Fill out all the fields.'),
+          title:  Text(AppLocalizations.of(context)!.translate("alert_dialog_title_invalid_data")!),
+          content:  Text(AppLocalizations.of(context)!.translate("warning_message_alert_dialog")!),
           actions: <Widget>[
             ElevatedButton(onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),),
@@ -282,7 +309,7 @@ static List<Customer> customerLists= [];
     }
     //each of fields is filled then the following:
     else {
-      var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
+      var snackBar = SnackBar( content: Text(AppLocalizations.of(context)!.translate("register_Success")!, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       ///navigate to the list page
        Navigator.pushNamed(context, "/listPage"); //redirect to the home page
@@ -303,38 +330,41 @@ static List<Customer> customerLists= [];
     }
   }
 
+  ///Function for email url launcher
 void  emailLauncher() {
   var userTypedEmailAddress = _email.value.text;
   launch("mailto: "+userTypedEmailAddress);
 }
 
 
+///function for phone Url launcher
 void PhoneLauncher() {
     var userTypedPhoneNumber = _phoneNumber.value.text;
     launch("tel: "+userTypedPhoneNumber);
 }
 
 
-//set the values to the encryptedSharedPreferences to what user has typed
+///set the values to the encryptedSharedPreferences to what user has typed
   void sendCustomerData(){
 
     //saved the TextField value to EncryptedSharedPreferences file
     savedCustomer.setString("first_Name", _firstName.value.text);
     savedCustomer.setString("last_Name",  _lastName.value.text);
     savedCustomer.setString("email",  _email.value.text);
-    savedCustomer.setString("phoneNumber",  _phoneNumber.value.text);
-    savedCustomer.setString("address", _phoneNumber.value.text);
+    savedCustomer.setString("phoneNumber",_phoneNumber.value.text);
+    savedCustomer.setString("address", _address.value.text);
     savedCustomer.setString("birthday", _birthday.value.text);
 
   }
 
-//Implementing the function to load the saved(previous) customer data
+///Implementing the function to load the saved(previous) customer data
 void savedData() {
 
   //get the string from saved File when loading the page
   savedCustomer.getString("first_Name").then((encryptedFName) {
     if (encryptedFName  != null ){
       _firstName.text = encryptedFName; // reassign the textField value to saved one.
+      displaySnackBarClearData(); //calling a function when firstName contains a value.
     }
   });
   //get the string from saved File when loading the page
@@ -342,6 +372,7 @@ void savedData() {
     if (encryptedLName  != null ){
       _lastName.text = encryptedLName; // reassign the textField value to saved one.
     }
+
   });
 
   //get the string from saved File when loading the page
@@ -369,6 +400,68 @@ void savedData() {
     }
   });
 }
+
+
+///function to display the snackbar to clear the previous customer information
+  void displaySnackBarClearData() {
+    var snackBar = SnackBar(content: Text(AppLocalizations.of(context)!.translate("loaded_data_key")!),
+      action:SnackBarAction(label:AppLocalizations.of(context)!.translate("clear_data")!,onPressed: removingTextFied,));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+  }
+
+  ///clear the TextField
+  void removingTextFied() async {
+    List<String> keysToRemove = [
+      "first_Name",
+      "last_Name",
+      "email",
+      "phoneNumber",
+      "address",
+      "birthday"
+    ];
+
+    //Handle the unwanted excpetion
+    for (var key in keysToRemove) {
+      try {
+        await savedCustomer.remove(key);
+        print('Successfully removed key: $key');
+      } catch (e) {
+        print('Error removing key $key: $e');
+      }
+    }
+
+    // Clear TextField values
+    _firstName.text = "";
+    _lastName.text = "";
+    _email.text = "";
+    _phoneNumber.text = "";
+    _address.text = "";
+    _birthday.text = "";
+  }
+
+
+  ///Function to show an alert-dialog to change the language of the application
+//function which show the alert dialog to select the language
+  void showTranslateButton() {
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          FilledButton(onPressed:() {
+              MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ],
+      ),
+    );
+  }
 
 
 }
