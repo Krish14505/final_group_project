@@ -17,6 +17,7 @@ class FlightListPage extends StatefulWidget{
 
 }
 
+//added some comment
 class flightListPageState extends State<FlightListPage>{
 
   late FlightsDAO flightsDAO;
