@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/AirplaneRegisterpage.dart';
+import 'package:group_project/Airplane_list_page.dart';
 
 import 'AppLocalizations.dart';
 import 'CustomerListPage.dart';
@@ -70,12 +71,12 @@ class MyApp extends StatefulWidget {
         routes: {
           //it will be sorted & defined as key and value pairs
 
-          '/homePage': (context) => MyHomePage(title: "Aiplane Registration ",),
-          '/airplaneRegister' : (context) => AirplaneRegister(),
-          
           '/homePage': (context) => MyHomePage(title:AppLocalizations.of(context)!.translate("application_Title")!,),
           '/registerPage': (context) => CustomerRegistration(),
           '/listPage': (context) => CustomerListPage(),
+          '/airplaneRegister' : (context) => AirplaneRegister(),
+          '/airplaneList' : (context) => AirplaneListPage(),
+
 
           //add other pages that you have made.
 
@@ -131,8 +132,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
               //1. Button for the customer Register Button.
               //change the button Text language when altering language
-              ElevatedButton(onPressed: registrationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
+              ElevatedButton(onPressed: CustomerregistrationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
               SizedBox(height: 10,),
+
+              //4.button for Airplane List
+              ElevatedButton(onPressed:airplaneRegisterDirector , child: Text(AppLocalizations.of(context)!.translate("airplane_list")!)),
+              SizedBox(height: 10,),
+
 
               //2.Button for Reservation Page
               ElevatedButton(onPressed: ()  { }, child: Text(AppLocalizations.of(context)!.translate("reservation_page")!)),
@@ -142,9 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(onPressed: () {  }, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
               SizedBox(height: 10,),
 
-              //4.button for Airplane List
-              ElevatedButton(onPressed: () { } , child: Text(AppLocalizations.of(context)!.translate("airplane_list")!)),
-              SizedBox(height: 10,),
 
 
             ],
@@ -180,8 +183,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 ///Function that redirects to register page.
-  void registrationDirector() {
+  void CustomerregistrationDirector() {
     Navigator.pushNamed(context, '/registerPage');
   }
+
+  ///function that redirects to register page for airplanes
+void airplaneRegisterDirector() {
+    Navigator.pushNamed(context, '/airplaneRegister');
+}
 
 }

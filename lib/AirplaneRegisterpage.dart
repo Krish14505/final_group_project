@@ -1,6 +1,8 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/CustomerDatabase.dart';
 
 import 'airplane.dart';
 import 'airplane_dao.dart';
@@ -58,10 +60,16 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
     _distance = TextEditingController();
 
     ///Pending the FloorDatabase thing
-    //creating the database connection
-    $Floorairplanedatabase.databaseBuilder("app_database.db").build().then((database) {
-      airplanedao = database.getAirplaneDAO; // instantiate the database object
+    //add the migration
 
+    final migration1to2 = Migration(1, 2, (database) async {
+      await database.execute(
+        "CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `airplaneType` TEXT, `PassengerNum` TEXT, `maxSpeed` TEXT, `distance` TEXT)",
+      );
+    });
+    //creating the database connection
+    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+      airplanedao = database.getAirplaneDAO; // instantiate the database object
       //fetch the customer from the customerList and put all into the database
       airplanedao.getAllAirPlanes().then((listOfAirplanes) {
         airplaneList.addAll(listOfAirplanes); // when loading the page , all the existing customer should be in the list.
@@ -115,7 +123,8 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
                           labelText: "Airplane Type"
                       )),
                 ),
-
+              ],
+            ),
 
 
                 ///second row of the textfield.
@@ -199,8 +208,7 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
                     child: Text("Add Airplane", style: TextStyle(fontSize: 20)),
                   ),
                 ),
-              ],
-            ),
+
           ],
         ),
       ),
@@ -230,7 +238,7 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
       var snackBar = SnackBar( content: Text("Airplane successfully added", style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-      Navigator.pushNamed(context, "/airplaneListPage");
+      Navigator.pushNamed(context, "/airplaneList");
 
       ///adding to the database
 

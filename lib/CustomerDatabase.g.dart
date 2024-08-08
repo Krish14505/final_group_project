@@ -74,13 +74,15 @@ class _$CustomerDatabase extends CustomerDatabase {
 
   CustomerDAO? _getCustomerDAOInstance;
 
+  AirplaneDao? _getAirplaneDAOInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -97,6 +99,8 @@ class _$CustomerDatabase extends CustomerDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`customer_id` INTEGER NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `email` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `address` TEXT NOT NULL, `birthday` TEXT NOT NULL, PRIMARY KEY (`customer_id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER NOT NULL, `airplaneType` TEXT NOT NULL, `number_passenger` TEXT NOT NULL, `maximum_speed` TEXT NOT NULL, `distance` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,6 +111,11 @@ class _$CustomerDatabase extends CustomerDatabase {
   @override
   CustomerDAO get getCustomerDAO {
     return _getCustomerDAOInstance ??= _$CustomerDAO(database, changeListener);
+  }
+
+  @override
+  AirplaneDao get getAirplaneDAO {
+    return _getAirplaneDAOInstance ??= _$AirplaneDao(database, changeListener);
   }
 }
 
@@ -193,5 +202,83 @@ class _$CustomerDAO extends CustomerDAO {
   @override
   Future<int> deleteCustomer(Customer customer) {
     return _customerDeletionAdapter.deleteAndReturnChangedRows(customer);
+  }
+}
+
+class _$AirplaneDao extends AirplaneDao {
+  _$AirplaneDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _airplaneInsertionAdapter = InsertionAdapter(
+            database,
+            'Airplane',
+            (Airplane item) => <String, Object?>{
+                  'id': item.id,
+                  'airplaneType': item.airplaneType,
+                  'number_passenger': item.number_passenger,
+                  'maximum_speed': item.maximum_speed,
+                  'distance': item.distance
+                }),
+        _airplaneUpdateAdapter = UpdateAdapter(
+            database,
+            'Airplane',
+            ['id'],
+            (Airplane item) => <String, Object?>{
+                  'id': item.id,
+                  'airplaneType': item.airplaneType,
+                  'number_passenger': item.number_passenger,
+                  'maximum_speed': item.maximum_speed,
+                  'distance': item.distance
+                }),
+        _airplaneDeletionAdapter = DeletionAdapter(
+            database,
+            'Airplane',
+            ['id'],
+            (Airplane item) => <String, Object?>{
+                  'id': item.id,
+                  'airplaneType': item.airplaneType,
+                  'number_passenger': item.number_passenger,
+                  'maximum_speed': item.maximum_speed,
+                  'distance': item.distance
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Airplane> _airplaneInsertionAdapter;
+
+  final UpdateAdapter<Airplane> _airplaneUpdateAdapter;
+
+  final DeletionAdapter<Airplane> _airplaneDeletionAdapter;
+
+  @override
+  Future<List<Airplane>> getAllAirPlanes() async {
+    return _queryAdapter.queryList('select * from Airplane',
+        mapper: (Map<String, Object?> row) => Airplane(
+            row['id'] as int,
+            row['airplaneType'] as String,
+            row['number_passenger'] as String,
+            row['maximum_speed'] as String,
+            row['distance'] as String));
+  }
+
+  @override
+  Future<void> insertAirplane(Airplane airplane) async {
+    await _airplaneInsertionAdapter.insert(airplane, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateAirplane(Airplane airplane) {
+    return _airplaneUpdateAdapter.updateAndReturnChangedRows(
+        airplane, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteAirplane(Airplane airplane) {
+    return _airplaneDeletionAdapter.deleteAndReturnChangedRows(airplane);
   }
 }

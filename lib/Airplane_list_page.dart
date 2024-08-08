@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
 import 'AirplaneRegisterpage.dart';
+import 'CustomerDatabase.dart';
 import 'airplane.dart';
 import 'airplane_dao.dart';
 
@@ -36,6 +37,21 @@ class AirplaneListPageState extends State<AirplaneListPage> {
     _number_passenger = TextEditingController();
     _maximum_speed = TextEditingController();
     _distance = TextEditingController();
+
+    final migration1to2 = Migration(1, 2, (database) async {
+      await database.execute(
+        "CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `airplaneType` TEXT, `PassengerNum` TEXT, `maxSpeed` TEXT, `distance` TEXT)",
+      );
+    });
+
+    //creating the database connection
+    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+      AirplaneDAO = database.getAirplaneDAO; // instantiate the database object
+      AirplaneDAO.getAllAirPlanes().then((listOfAirplanes) {
+        airplaneLists.addAll(listOfAirplanes);
+      });
+    });
+
   }
 
 
@@ -103,8 +119,8 @@ Widget ListPage() {
                     setState(() {
                       selectedAirplane = airplane;
                       _airplaneType.text = airplane.airplaneType;
-                      _number_passenger.text = airplane.PassengerNum;
-                      _maximum_speed.text = airplane.maxSpeed;
+                      _number_passenger.text = airplane.number_passenger;
+                      _maximum_speed.text = airplane.maximum_speed;
                       _distance.text = airplane.distance;
 
                     }
@@ -119,11 +135,11 @@ Widget ListPage() {
                     ),
                     child: ListTile(
                       title: Text('${airplane.airplaneType} ${airplane
-                          .PassengerNum}',
+                          .number_passenger}',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight
                               .bold)),
                       subtitle: Text(
-                          airplane.maxSpeed, style: TextStyle(fontSize: 14)),
+                          airplane.maximum_speed, style: TextStyle(fontSize: 14)),
                     ),
                   ),
                 );
@@ -145,13 +161,13 @@ Widget airplaneDetailsWithForm() {
             children: <Widget>[
 
               SizedBox(height: 20),
-              Text("Customer Details", style: TextStyle(
+              Text("Airplne Details", style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
 
 
-              ///first row for the customer last name and first name.
+              ///first row for the
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -259,19 +275,34 @@ Widget airplaneDetailsWithForm() {
                         )),
                   ),
 
-                ],)
+                ],),
+
+              //Updated and deleted
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(height: 20,),
+                  Expanded(flex: 2,
+                      child: FilledButton(
+                          onPressed: UpdateAirplane, child: Text("Update"))),
+                  SizedBox(width: 20,),
+                  Expanded(flex: 2,
+                      child: FilledButton(
+                          onPressed: deleteAirplane, child: Text("Delete"))),
+                ],
+              )
+
+
             ])
     );
   }
 }
-///krish chaudhary
-  ///function to update the customer when he click on the update button
-  void UpdateCustomer(){
+
+  void UpdateAirplane(){
     if(selectedAirplane != null) {
-      //creating an instance of the updated customer.
       Airplane updatedAirplane = Airplane(
-          selectedAirplane!.airplane_id, // fetch the selected customer_id from the database.
-          //use the updated text value to update the customer entry.
+          selectedAirplane!.id,
           _airplaneType.text,
           _number_passenger.text,
           _maximum_speed.text,
@@ -279,14 +310,12 @@ Widget airplaneDetailsWithForm() {
 
       );
 
-      //call the dao UpdatedCustomer(Customer) method.
       AirplaneDAO.updateAirplane(updatedAirplane).then((value) {
         //gui to react
         setState(() {
 
 
-          //update the customer to the list.
-          int index = airplaneLists.indexWhere((airplane) => airplane.airplane_id == selectedAirplane!.airplane_id);
+          int index = airplaneLists.indexWhere((airplane) => airplane.id == selectedAirplane!.id);
 
           if(index != null) {
             airplaneLists[index] = updatedAirplane;
@@ -294,19 +323,16 @@ Widget airplaneDetailsWithForm() {
           selectedAirplane = updatedAirplane;
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Customer updated successfully',style: TextStyle(color: Colors.lightGreen),)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Airplane Details updated successfully',style: TextStyle(color: Colors.lightGreen),)));
       });
     }
   }
 
-  ///Function That run when deleting  customer
-  void DeleteAirplane(){
+  void deleteAirplane(){
     setState(() {
 
-      //delete the customer from the database first
       AirplaneDAO.deleteAirplane(selectedAirplane!);
 
-      //and then remove from the customer
       airplaneLists.remove(selectedAirplane);
 
       //make the selectedAirplane to be null
@@ -316,5 +342,5 @@ Widget airplaneDetailsWithForm() {
   }
 
 
-} //end of CustomerListPageState class
+} //end of AirplaneListPage class
 
