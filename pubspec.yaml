@@ -33,6 +33,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   floor: ^1.4.0
+  floor_annotation: ^1.4.0
+  flutter_secure_storage: ^7.0.1
   flutter_test:
     sdk: flutter
 

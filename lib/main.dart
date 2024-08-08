@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,6 +24,7 @@ class MyApp extends StatefulWidget {
 
   //override the method
   @override
+
   State<MyApp> createState() {
     return MyAppState();
   }
@@ -92,6 +92,7 @@ class MyApp extends StatefulWidget {
 
       );
     }
+
   }
 
 
@@ -108,7 +109,15 @@ class MyHomePage extends StatefulWidget {
 
 ///class that contains four button which redirects different pages
 class _MyHomePageState extends State<MyHomePage> {
-
+  int _counter = 0;
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+  void navigateToRP(){
+    Navigator.pushNamed(context,'/reservation');
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -126,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       body: Center(
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -153,8 +163,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           )
 
-      ),
 
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -191,5 +206,6 @@ class _MyHomePageState extends State<MyHomePage> {
 void airplaneRegisterDirector() {
     Navigator.pushNamed(context, '/airplaneRegister');
 }
+
 
 }
