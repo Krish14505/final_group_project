@@ -87,7 +87,7 @@ class MyApp extends StatefulWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
+//created the title string for the page
   final String title;
 
   @override
