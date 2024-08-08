@@ -129,18 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-
-              ElevatedButton(onPressed: () {Navigator.pushNamed(context, "/airplaneRegister"); } , child: Text("Go to Airplane List page"),)],
-          )
-
-      ),
-
-    );
-  }
-
-
               //1. Button for the customer Register Button.
-                                                                      //change the button Text language when altering language
+              //change the button Text language when altering language
               ElevatedButton(onPressed: registrationDirector, child: Text( AppLocalizations.of(context)!.translate("register_button")!),),
               SizedBox(height: 10,),
 
@@ -156,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(onPressed: () { } , child: Text(AppLocalizations.of(context)!.translate("airplane_list")!)),
               SizedBox(height: 10,),
 
+
             ],
           )
 
@@ -163,6 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
+
+
+
 
  ///function which show the alert dialog to select the language
   void showTranslateButton() {
