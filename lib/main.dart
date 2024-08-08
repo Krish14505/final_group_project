@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:group_project/AirplaneRegisterpage.dart';
-import 'package:group_project/CustomerAppLocalizations.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerListPage.dart';
 import 'Customer_Registration.dart';
 
@@ -71,8 +70,6 @@ class MyApp extends StatefulWidget {
           //it will be sorted & defined as key and value pairs
 
           '/homePage': (context) => MyHomePage(title: "Aiplane Registration ",),
-          '/airplaneRegister' : (context) => AirplaneRegister(),
-          
           '/homePage': (context) => MyHomePage(title:AppLocalizations.of(context)!.translate("application_Title")!,),
           '/registerPage': (context) => CustomerRegistration(),
           '/listPage': (context) => CustomerListPage(),

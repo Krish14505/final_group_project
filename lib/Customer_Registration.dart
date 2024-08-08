@@ -3,10 +3,10 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_project/Customer.dart';
-import 'package:group_project/CustomerAppLocalizations.dart';
 import 'package:group_project/CustomerDAO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerDatabase.dart';
 import 'main.dart';
 
