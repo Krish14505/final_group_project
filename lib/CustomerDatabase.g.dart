@@ -78,6 +78,8 @@ class _$CustomerDatabase extends CustomerDatabase {
 
   ReservationDAO? _getReservationDAOInstance;
 
+  FlightsDAO? _flightsDAOInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -105,6 +107,8 @@ class _$CustomerDatabase extends CustomerDatabase {
             'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER NOT NULL, `airplaneType` TEXT NOT NULL, `number_passenger` TEXT NOT NULL, `maximum_speed` TEXT NOT NULL, `distance` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER NOT NULL, `reservationDate` TEXT NOT NULL, `reservationName` TEXT NOT NULL, PRIMARY KEY (`reservationId`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Flight` (`flight_id` INTEGER NOT NULL, `destination` TEXT NOT NULL, `source` TEXT NOT NULL, `departure` INTEGER NOT NULL, `arrival` INTEGER NOT NULL, PRIMARY KEY (`flight_id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -126,6 +130,11 @@ class _$CustomerDatabase extends CustomerDatabase {
   ReservationDAO get getReservationDAO {
     return _getReservationDAOInstance ??=
         _$ReservationDAO(database, changeListener);
+  }
+
+  @override
+  FlightsDAO get flightsDAO {
+    return _flightsDAOInstance ??= _$FlightsDAO(database, changeListener);
   }
 }
 
@@ -370,5 +379,83 @@ class _$ReservationDAO extends ReservationDAO {
   @override
   Future<int> deleteReservation(Reservation reservation) {
     return _reservationDeletionAdapter.deleteAndReturnChangedRows(reservation);
+  }
+}
+
+class _$FlightsDAO extends FlightsDAO {
+  _$FlightsDAO(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _flightInsertionAdapter = InsertionAdapter(
+            database,
+            'Flight',
+            (Flight item) => <String, Object?>{
+                  'flight_id': item.flight_id,
+                  'destination': item.destination,
+                  'source': item.source,
+                  'departure': item.departure,
+                  'arrival': item.arrival
+                }),
+        _flightUpdateAdapter = UpdateAdapter(
+            database,
+            'Flight',
+            ['flight_id'],
+            (Flight item) => <String, Object?>{
+                  'flight_id': item.flight_id,
+                  'destination': item.destination,
+                  'source': item.source,
+                  'departure': item.departure,
+                  'arrival': item.arrival
+                }),
+        _flightDeletionAdapter = DeletionAdapter(
+            database,
+            'Flight',
+            ['flight_id'],
+            (Flight item) => <String, Object?>{
+                  'flight_id': item.flight_id,
+                  'destination': item.destination,
+                  'source': item.source,
+                  'departure': item.departure,
+                  'arrival': item.arrival
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Flight> _flightInsertionAdapter;
+
+  final UpdateAdapter<Flight> _flightUpdateAdapter;
+
+  final DeletionAdapter<Flight> _flightDeletionAdapter;
+
+  @override
+  Future<List<Flight>> getAllFlights() async {
+    return _queryAdapter.queryList('select * from Flight',
+        mapper: (Map<String, Object?> row) => Flight(
+            row['flight_id'] as int,
+            row['destination'] as String,
+            row['source'] as String,
+            row['arrival'] as int,
+            row['departure'] as int));
+  }
+
+  @override
+  Future<void> addFlight(Flight flight) async {
+    await _flightInsertionAdapter.insert(flight, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateFlight(Flight flight) {
+    return _flightUpdateAdapter.updateAndReturnChangedRows(
+        flight, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteFlight(Flight flight) {
+    return _flightDeletionAdapter.deleteAndReturnChangedRows(flight);
   }
 }

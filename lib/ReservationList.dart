@@ -56,10 +56,17 @@ class ReservationListState extends State<ReservationList> {
     });
   }
 
-  @override
   void dispose() {
     _reservationName.dispose();
+    _customerName.dispose();
+    _flightName.dispose();
+    _reservationDate.dispose();
+    _depatureCity.dispose();
+    _destinationCity.dispose();
+    _depatureTime.dispose();
+    _arrivalTime.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

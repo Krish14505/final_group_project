@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/FlightDatabase.dart';
-import 'package:group_project/FlightsDAO.dart';
 
+import 'CustomerDatabase.dart';
 import 'Flight.dart';
+import 'FlightsDAO.dart';
 
 class FlightListPage extends StatefulWidget{
 
@@ -41,7 +41,7 @@ class flightListPageState extends State<FlightListPage>{
   }
 
   Future<List<Flight>> initializeDatabase() async {
-    final database = await $FloorFlightDatabase.databaseBuilder("app_database.db").build();
+    final database = await $FloorCustomerDatabase.databaseBuilder("app_database.db").build();
     flightsDAO = database.flightsDAO;
     Future<List<Flight>> fs = flightsDAO.getAllFlights();
     flightsNow = await fs;
