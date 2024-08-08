@@ -78,7 +78,7 @@ class _$CustomerDatabase extends CustomerDatabase {
 
   ReservationDAO? _getReservationDAOInstance;
 
-  FlightsDAO? _flightsDAOInstance;
+  FlightsDAO? _getflightsDAOInstance;
 
   Future<sqflite.Database> open(
     String path,
@@ -86,7 +86,7 @@ class _$CustomerDatabase extends CustomerDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 4,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -108,7 +108,7 @@ class _$CustomerDatabase extends CustomerDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER NOT NULL, `reservationDate` TEXT NOT NULL, `reservationName` TEXT NOT NULL, PRIMARY KEY (`reservationId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Flight` (`flight_id` INTEGER NOT NULL, `destination` TEXT NOT NULL, `source` TEXT NOT NULL, `departure` INTEGER NOT NULL, `arrival` INTEGER NOT NULL, PRIMARY KEY (`flight_id`))');
+            'CREATE TABLE IF NOT EXISTS `Flight` (`flight_id` INTEGER NOT NULL, `destination` TEXT NOT NULL, `source` TEXT NOT NULL, `departure` TEXT NOT NULL, `arrival` TEXT NOT NULL, PRIMARY KEY (`flight_id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -133,8 +133,8 @@ class _$CustomerDatabase extends CustomerDatabase {
   }
 
   @override
-  FlightsDAO get flightsDAO {
-    return _flightsDAOInstance ??= _$FlightsDAO(database, changeListener);
+  FlightsDAO get getflightsDAO {
+    return _getflightsDAOInstance ??= _$FlightsDAO(database, changeListener);
   }
 }
 
@@ -439,8 +439,8 @@ class _$FlightsDAO extends FlightsDAO {
             row['flight_id'] as int,
             row['destination'] as String,
             row['source'] as String,
-            row['arrival'] as int,
-            row['departure'] as int));
+            row['arrival'] as String,
+            row['departure'] as String));
   }
 
   @override
