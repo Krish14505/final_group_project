@@ -399,7 +399,7 @@ Widget customerDetailsWithForm() {
   }
 
   ///Function That run when deleting  customer
-  void DeleteCustomer(){
+  void DeleteCustomer (){
     setState(() {
 
       //delete the customer from the database first

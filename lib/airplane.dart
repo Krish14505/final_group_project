@@ -7,17 +7,19 @@ class Airplane {
   static int ID = 1 ;
 
   @primaryKey
-  final int airplane_id;
+  final int id;
   final String airplaneType;
-  final String PassengerNum;
-  final String maxSpeed;
+  final String number_passenger;
+  final String maximum_speed;
   final String distance;
 
 
-  Airplane(this.airplane_id,this.airplaneType,this.PassengerNum,this.maxSpeed,this.distance) {
-    if (airplane_id >= ID) {
-      ID = airplane_id + 1;
+  Airplane(this.id,this.airplaneType,this.number_passenger,this.maximum_speed,this.distance) {
+    if (id >= ID) {
+      ID = id + 1;
     }
   }
+
+
 
 }

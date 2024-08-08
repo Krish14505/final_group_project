@@ -10,7 +10,7 @@ import 'airplane_dao.dart';
 part 'CustomerDatabase.g.dart';
 
 ///Customer Database class extends FloorDatabase
-@Database(version: 1, entities:[Customer,Airplane])
+@Database(version: 2, entities:[Customer,Airplane])
 abstract class CustomerDatabase extends FloorDatabase {
 
   ///get the interface ready to database
