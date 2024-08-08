@@ -1,11 +1,12 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'CustomerDAO.dart';
+import 'CustomerDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
-import 'ReservationDB.dart';
 
 class ReservationPage extends StatefulWidget {
   @override
@@ -15,12 +16,13 @@ class ReservationPage extends StatefulWidget {
 
 class ReservationPageState extends State<ReservationPage> {
   late ReservationDAO reservationDAO;
+  late CustomerDAO customerDAO;
   static List<Reservation> reservationList = [];
 
   String? selectedCustomer;
   String? selectedFlight;
-  List<String> customers = [];
-  List<String> flights = [];
+  late List<String> customersList = [];
+  late List<String> flightsList = [];
   late TextEditingController _reservationDate;
   late TextEditingController _reservationName;
 
@@ -31,24 +33,29 @@ class ReservationPageState extends State<ReservationPage> {
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
-    loadData();
 
     //initialize the SavedReservation object
     savedReservation = EncryptedSharedPreferences();
 
+    //add the migration to keep the reservation table in the same customerDatabase
+    final migration2to3 = Migration(2, 3, (database) async{
+      await database.execute(
+        "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
+      );
+    });
+
+    //creating the database connection
+    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+      reservationDAO = database.getReservationDAO;
+      customerDAO = database.getCustomerDAO;
+      reservationDAO.getAllReservations().then((listofReservation) {
+        reservationList.addAll(listofReservation);
+
+
+      });
+    });
     //savedReservation() function called
     savedReservationData();
-  }
-
-
-  void loadData() async {
-    customers = ['Krish','Evan','Yazid','Himanshu'];
-    flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
-
-    final database = await $FloorReservationDB.databaseBuilder('reservation_database.db').build();
-    reservationList = await database.reservationDao.getAllReservations();
-
-    setState(() {});
   }
 
 
@@ -79,22 +86,15 @@ class ReservationPageState extends State<ReservationPage> {
       reservationList.add(reservation);
 
       //invoking a method to insert the new customer into the table
-      final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
-      await database.reservationDao.insertReservation(reservation);
+       reservationDAO.insertReservation(reservation);
     //add the reservationName to the encryptedSharedPreferences file
     sendReservationData();
     }
-
-
-
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Reservation added')),
     );
 
-
-    // Reload the data to update the ListView
-    loadData();
   }
 
   @override
@@ -155,7 +155,7 @@ class ReservationPageState extends State<ReservationPage> {
                   selectedCustomer = newValue;
                 });
               },
-              items: customers.map<DropdownMenuItem<String>>((String value) {
+              items: customersList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -171,7 +171,7 @@ class ReservationPageState extends State<ReservationPage> {
                   selectedFlight = newValue;
                 });
               },
-              items: flights.map<DropdownMenuItem<String>>((String value) {
+              items: flightsList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -216,6 +216,7 @@ class ReservationPageState extends State<ReservationPage> {
 
   void sendReservationData(){
     savedReservation.setString("reservation_Name", _reservationName.value.text);
+    savedReservation.setString("reservation_Date", _reservationDate.value.text);
   }
 
 //put the previously used customer value to the TextField when loading the page second time.
@@ -226,6 +227,13 @@ class ReservationPageState extends State<ReservationPage> {
       }
 
       });
+
+    savedReservation.getString("reservation_Date").then((encryptedReservationDate) {
+      if(encryptedReservationDate !=null){
+        _reservationName.text = encryptedReservationDate;
+      }
+
+    });
   }
   void navigateToRL(){
     Navigator.pushNamed(context,'/reservation');

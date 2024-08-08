@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/AirplaneRegisterpage.dart';
 import 'package:group_project/Airplane_list_page.dart';
+import 'package:group_project/ReservationList.dart';
+import 'package:group_project/ReservationPage.dart';
 
 import 'AppLocalizations.dart';
 import 'CustomerListPage.dart';
@@ -76,6 +78,8 @@ class MyApp extends StatefulWidget {
           '/listPage': (context) => CustomerListPage(),
           '/airplaneRegister' : (context) => AirplaneRegister(),
           '/airplaneList' : (context) => AirplaneListPage(),
+          '/reservationpage': (context) => ReservationPage(),
+          "/reservation": (context) => ReservationList(),
 
 
           //add other pages that you have made.
@@ -151,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
               //2.Button for Reservation Page
-              ElevatedButton(onPressed: ()  { }, child: Text(AppLocalizations.of(context)!.translate("reservation_page")!)),
+              ElevatedButton(onPressed:reservationDirector, child: Text(AppLocalizations.of(context)!.translate("reservation_page")!)),
               SizedBox(height: 10,),
 
               //3. button for Flights Page
@@ -205,6 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
   ///function that redirects to register page for airplanes
 void airplaneRegisterDirector() {
     Navigator.pushNamed(context, '/airplaneRegister');
+}
+
+void reservationDirector() {
+    Navigator.pushNamed(context, '/reservationpage');
 }
 
 

@@ -1,12 +1,14 @@
 import 'dart:ffi';
 
+import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:group_project/Reservation.dart';
-import 'package:group_project/ReservationDAO.dart';
-import 'package:group_project/ReservationDB.dart';
-import 'package:group_project/ReservationPage.dart';
+
+import 'CustomerDatabase.dart';
+import 'Reservation.dart';
+import 'ReservationDAO.dart';
+import 'ReservationPage.dart';
 
 class ReservationList extends StatefulWidget{
   String title = "Reservation List";
@@ -39,11 +41,17 @@ class ReservationListState extends State<ReservationList> {
     super.initState();
     _reservationName = TextEditingController();
 
-    $FloorReservationDB.databaseBuilder("reservation_database.db").build().then((database){
-      reservationdao = database.reservationDao;
+    final migration2to3 = Migration(2, 3, (database) async{
+      await database.execute(
+          "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
+      );
+    });
 
-      reservationdao.getAllReservations().then((ListOfReservation){
-        reservationList.addAll(ListOfReservation);
+    //creating the database connection
+    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+      var reservationDAO = database.getReservationDAO;
+      reservationDAO.getAllReservations().then((listofReservation) {
+        reservationList.addAll(listofReservation);
       });
     });
   }
