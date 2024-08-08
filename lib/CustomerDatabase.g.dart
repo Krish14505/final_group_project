@@ -78,7 +78,7 @@ class _$CustomerDatabase extends CustomerDatabase {
 
   ReservationDAO? _getReservationDAOInstance;
 
-  FlightsDAO? _getflightsDAOInstance;
+  FlightsDAO? _getFlightDAOInstance;
 
   Future<sqflite.Database> open(
     String path,
@@ -133,8 +133,8 @@ class _$CustomerDatabase extends CustomerDatabase {
   }
 
   @override
-  FlightsDAO get getflightsDAO {
-    return _getflightsDAOInstance ??= _$FlightsDAO(database, changeListener);
+  FlightsDAO get getFlightDAO {
+    return _getFlightDAOInstance ??= _$FlightsDAO(database, changeListener);
   }
 }
 

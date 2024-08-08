@@ -405,8 +405,11 @@ Widget customerDetailsWithForm() {
       //delete the customer from the database first
       customerdao.deleteCustomer(selectedCustomer!);
 
-      //and then remove from the customer
-      customerLists.remove(selectedCustomer);
+   setState(() {
+     //and then remove from the customer
+     customerLists.remove(selectedCustomer);
+
+   });
 
     });
 

@@ -62,8 +62,9 @@ class flightListPageState extends State<FlightListPage>{
       );
     });
 
+
     $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration3to4]).build().then((database) {
-        flightsDAO = database.getflightsDAO;
+        flightsDAO = database.getFlightDAO;
 
         flightsDAO.getAllFlights().then((listofFlights) {
           flightList.addAll(listofFlights);
