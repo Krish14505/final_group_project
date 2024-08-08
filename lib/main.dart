@@ -15,21 +15,19 @@ class MyApp extends StatefulWidget {
 
   //given setLocale method in module
   static void setLocale(BuildContext context, Locale newLocale) async {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    MyAppState? state = context.findAncestorStateOfType<MyAppState>();
     state?.changeLanguage(newLocale); // calls changeLanguage
   }
 
   //override the method
   @override
   State<MyApp> createState() {
-    return _MyAppState();
+    return MyAppState();
   }
-
-
 }
 
 
-  class _MyAppState extends State<MyApp> {
+  class MyAppState extends State<MyApp> {
 
   //create the variable for Locale
     var locale = Locale("en","CA");
@@ -85,7 +83,7 @@ class MyApp extends StatefulWidget {
   }
 
 
-
+///MyHomePage class
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -96,6 +94,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+///class that contains four button which redirects different pages
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
@@ -139,7 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
- //function which show the alert dialog to select the language
+
+ ///function which show the alert dialog to select the language
   void showTranslateButton() {
     //alert dialog which has three button of the languages
     showDialog<String>(
@@ -160,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
+///Function that redirects to register page.
   void registrationDirector() {
     Navigator.pushNamed(context, '/registerPage');
   }
