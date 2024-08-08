@@ -242,8 +242,82 @@ void addFlight() {
     //send the information to the encryptedSharedPreferences file
     sendAirplaneData();
   }
+}
+
+//function that creates the Flight data to encryptedSharedPreferences
+void sendAirplaneData() {
+    savedFlight.setString("departure", _departureController.value.text);
+    savedFlight.setString("arrival", _arrivalController.value.text);
+    savedFlight.setString("destination", _destinationController.value.text);
+    savedFlight.setString("source", _sourceController.value.text);
+}
+
+//function that load the data from the EncryptedSharedPreferences
+
+void savedData(){
+
+    //departure
+    savedFlight.getString("departure").then((encryptedDeparture) {
+      if(encryptedDeparture != null) {
+        _departureController.text = encryptedDeparture;
+        displaySnackBarClearData();
+      }
+    });
+
+    // arrival
+    savedFlight.getString("arrival").then((encryptedArrival) {
+      if(encryptedArrival != null) {
+        _departureController.text =encryptedArrival;
+      }
+    });
+
+    //destination
+  savedFlight.getString("destination").then((encryptedDestination) {
+      if(encryptedDestination != null){
+        _destinationController.text = encryptedDestination;
+      }
+    });
+
+    //source
+  savedFlight.getString("source").then((encryptedSource) {
+      if(encryptedSource != null) {
+        _sourceController.text = encryptedSource;
+      }
+  });
+}
+
+void displaySnackBarClearData(){
+  var snackBar = SnackBar(content: Text("previous Fligh Information have been loaded! "),
+      action:SnackBarAction(label:"clear data",onPressed: removingTextFied,));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 }
+
+  void removingTextFied() async {
+    List<String> keysToRemove = [
+      "departure",
+      "arrival",
+      "destination",
+      "source",
+    ];
+
+    //Handle the unwanted excpetion
+    for (var key in keysToRemove) {
+      try {
+        await savedFlight.remove(key);
+        print('Successfully removed key: $key');
+      } catch (e) {
+        print('Error removing key $key: $e');
+      }
+    }
+
+    // Clear TextField values
+    _sourceController.text = "";
+    _arrivalController.text = "";
+    _destinationController.text= "";
+    _departureController.text = "";
+  }
+
 }
 
 
