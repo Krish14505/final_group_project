@@ -74,7 +74,7 @@ class MyAppState extends State<MyApp> {
         "/reservation": (context) => ReservationList(),
 
         //add other pages that you have made.
-        
+
       },
       initialRoute: '/reservationpage',
       title: 'Home page',
