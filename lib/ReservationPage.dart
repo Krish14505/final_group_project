@@ -2,6 +2,7 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'CustomerDAO.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
 import 'ReservationDB.dart';
@@ -9,6 +10,7 @@ import 'ReservationDB.dart';
 class ReservationPage extends StatefulWidget {
   @override
   State<ReservationPage> createState() => ReservationPageState();
+
 }
 
 class ReservationPageState extends State<ReservationPage> {
@@ -19,7 +21,7 @@ class ReservationPageState extends State<ReservationPage> {
   String? selectedFlight;
   List<String> customers = [];
   List<String> flights = [];
-  DateTime? _reservationDate;
+  late TextEditingController _reservationDate;
   late TextEditingController _reservationName;
 
   //Created the encrypted Shared preferences variable
@@ -40,10 +42,10 @@ class ReservationPageState extends State<ReservationPage> {
 
 
   void loadData() async {
-    customers = ['Krish', 'Evan', 'Yazid', 'Himanshu'];
+    customers = ;
     flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
 
-    final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
+    final database = await $FloorReservationDB.databaseBuilder('reservation_database.db').build();
     reservationList = await database.reservationDao.getAllReservations();
 
     setState(() {});
@@ -51,24 +53,40 @@ class ReservationPageState extends State<ReservationPage> {
 
 
   void _addReservation() async {
-    if (selectedCustomer == null || selectedFlight == null || _reservationDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields')),
-      );
-    }
+          if(_reservationDate ==  null || _reservationName.value.text == null ) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Missing Fields!'),
+            content: const Text('Please Fill out all the fields.'),
+            actions: <Widget>[
+              ElevatedButton(onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),),
+            ],
+          ),
+        );
+      }
+    //each of fields is filled then the following:
+    else {
+      var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      ///navigate to the list page
+      Navigator.pushNamed(context, "/listPage"); //redirect to the home page
+
+      //database stuff to add the customer
+      var reservation = Reservation(Reservation.ID++, _reservationDate.value.text, _reservationName.value.text);
+      //add to the list first
+      reservationList.add(reservation);
+
+      //invoking a method to insert the new customer into the table
+      final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
+      await database.reservationDao.insertReservation(reservation);
     //add the reservationName to the encryptedSharedPreferences file
     sendReservationData();
+    }
 
-    final reservation = Reservation(
-      reservationId: 0,
-      customerName: selectedCustomer!,
-      flightName: selectedFlight!,
-      reservationName: _reservationName.text,
-      reservationDate: _reservationDate!,
-    );
 
-    final database = await $FloorReservationDB.databaseBuilder('app_database.db').build();
-    await database.reservationDao.insertReservation(reservation);
+
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Reservation added')),
@@ -171,51 +189,21 @@ class ReservationPageState extends State<ReservationPage> {
               maxLength: 30,
             ),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2101),
-                );
-                if (pickedDate != null) {
-                  setState(() {
-                    _reservationDate = pickedDate;
-                  });
-                }
-              },
-              child: Text('Select Reservation Date'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            TextField(
+              controller: _reservationDate,
+              decoration: InputDecoration(
+                hintText: "Enter Reservation Date",
+                border: OutlineInputBorder(),
+                labelText: "Reservation Date",
               ),
+              maxLength: 30,
             ),
-            SizedBox(height: 16),
-            if (_reservationDate != null)
-              Text(
-                'Selected Date: ${_reservationDate!.toLocal().toString().split(' ')[0]}',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _addReservation,
               child: Text('Add Reservation'),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: reservationList.length,
-                itemBuilder: (context, index) {
-                  final reservation = reservationList[index];
-                  return ListTile(
-                    title: Text(reservation.reservationName),
-                    subtitle: Text('Customer: ${reservation.customerName}, Flight: ${reservation.flightName}'),
-                    onTap: () {
-                    },
-                  );
-                },
               ),
             ),
           ],
@@ -239,5 +227,7 @@ class ReservationPageState extends State<ReservationPage> {
 
       });
   }
-
+  void navigateToRL(){
+    Navigator.pushNamed(context,'/reservation');
+  }
 }

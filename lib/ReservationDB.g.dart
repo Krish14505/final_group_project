@@ -96,7 +96,7 @@ class _$ReservationDB extends ReservationDB {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER NOT NULL, `customerName` TEXT NOT NULL, `flightName` TEXT NOT NULL, `reservationDate` INTEGER NOT NULL, `reservationName` TEXT NOT NULL, PRIMARY KEY (`reservationId`))');
+            'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER NOT NULL, `reservationDate` TEXT NOT NULL, `reservationName` TEXT NOT NULL, PRIMARY KEY (`reservationId`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -121,10 +121,7 @@ class _$ReservationDAO extends ReservationDAO {
             'reservations',
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
-                  'flightName': item.flightName,
-                  'reservationDate':
-                      _dateTimeConverter.encode(item.reservationDate),
+                  'reservationDate': item.reservationDate,
                   'reservationName': item.reservationName
                 }),
         _reservationUpdateAdapter = UpdateAdapter(
@@ -133,10 +130,7 @@ class _$ReservationDAO extends ReservationDAO {
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
-                  'flightName': item.flightName,
-                  'reservationDate':
-                      _dateTimeConverter.encode(item.reservationDate),
+                  'reservationDate': item.reservationDate,
                   'reservationName': item.reservationName
                 }),
         _reservationDeletionAdapter = DeletionAdapter(
@@ -145,10 +139,7 @@ class _$ReservationDAO extends ReservationDAO {
             ['reservationId'],
             (Reservation item) => <String, Object?>{
                   'reservationId': item.reservationId,
-                  'customerName': item.customerName,
-                  'flightName': item.flightName,
-                  'reservationDate':
-                      _dateTimeConverter.encode(item.reservationDate),
+                  'reservationDate': item.reservationDate,
                   'reservationName': item.reservationName
                 });
 
@@ -168,24 +159,18 @@ class _$ReservationDAO extends ReservationDAO {
   Future<List<Reservation>> fetchAllReservations() async {
     return _queryAdapter.queryList('SELECT * FROM Reservation',
         mapper: (Map<String, Object?> row) => Reservation(
-            reservationId: row['reservationId'] as int,
-            customerName: row['customerName'] as String,
-            flightName: row['flightName'] as String,
-            reservationDate:
-                _dateTimeConverter.decode(row['reservationDate'] as int),
-            reservationName: row['reservationName'] as String));
+            row['reservationId'] as int,
+            row['reservationDate'] as String,
+            row['reservationName'] as String));
   }
 
   @override
   Future<List<Reservation>> getAllReservations() async {
     return _queryAdapter.queryList('SELECT * FROM Reservation',
         mapper: (Map<String, Object?> row) => Reservation(
-            reservationId: row['reservationId'] as int,
-            customerName: row['customerName'] as String,
-            flightName: row['flightName'] as String,
-            reservationDate:
-                _dateTimeConverter.decode(row['reservationDate'] as int),
-            reservationName: row['reservationName'] as String));
+            row['reservationId'] as int,
+            row['reservationDate'] as String,
+            row['reservationName'] as String));
   }
 
   @override
@@ -205,6 +190,3 @@ class _$ReservationDAO extends ReservationDAO {
     return _reservationDeletionAdapter.deleteAndReturnChangedRows(reservation);
   }
 }
-
-// ignore_for_file: unused_element
-final _dateTimeConverter = DateTimeConverter();

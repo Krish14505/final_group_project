@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:group_project/ReservationPage.dart';
-
+import 'package:group_project/ReservationList.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {'/home':(context) => const MyHomePage(title:'Group Project'),
-        '/reservation':(context) => ReservationPage()},
+        '/reservation':(context) => ReservationPage(),
+      '/reservationList':(context)=> ReservationList()},
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
