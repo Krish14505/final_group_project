@@ -59,22 +59,22 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
 
     ///Pending the FloorDatabase thing
     //creating the database connection
-        $FloorCustomerDatabase.databaseBuilder("app_database.db").build().then((database) {
-          airplanedao = database.getAirplaneDAO; // instantiate the database object
+    $Floorairplanedatabase.databaseBuilder("app_database.db").build().then((database) {
+      airplanedao = database.getAirplaneDAO; // instantiate the database object
 
-          //fetch the customer from the customerList and put all into the database
-          airplanedao.getAllAirPlanes().then((listOfAirplanes) {
-            airplaneList.addAll(listOfAirplanes); // when loading the page , all the existing customer should be in the list.
+      //fetch the customer from the customerList and put all into the database
+      airplanedao.getAllAirPlanes().then((listOfAirplanes) {
+        airplaneList.addAll(listOfAirplanes); // when loading the page , all the existing customer should be in the list.
 
-          }); // get all customers
-        }); // FloorCustomerDatabase
+      }); // get all customers
+    }); // FloorCustomerDatabase
 
 
     //initialize the savedAirplane EncryptedSharedPreferences object
     savedAirplane = EncryptedSharedPreferences();
 
     //remaining calling the function to saved the data
-      savedData();
+    savedData();
   }
 
 
@@ -86,124 +86,124 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
           backgroundColor: Colors.cyan,
           title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold))
       ),
-    body: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Text("Airplane Registration",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 20),
+            Text("Airplane Registration",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)),
 
-          //First row of the text field for the airplanetype
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.airplane_ticket)),
-              //column for the other field
-              Container(
-                width: 300, // Adjust the width as needed
-                padding: const EdgeInsets.all(10.0), // Optional: Add padding
-                margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
-                decoration: BoxDecoration(
-                  color: Colors.white, // Optional: Add background color
-                  borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
-
-                ),
-                child: TextField(controller: _airplaneType,
-                    decoration: InputDecoration(
-                        hintText:"please enter the Airplane Type",
-                        border: OutlineInputBorder(),
-                        labelText: "Airplane Type"
-                    )),
-              ),
-
-
-
-            ///second row of the textfield.
+            //First row of the text field for the airplanetype
             Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.person)),
-                          //column for the other field
-                          Container(
-                            width: 300, // Adjust the width as needed
-                            padding: const EdgeInsets.all(10.0), // Optional: Add padding
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
-                            decoration: BoxDecoration(
-                              color: Colors.white, // Optional: Add background color
-                              borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.airplane_ticket)),
+                //column for the other field
+                Container(
+                  width: 300, // Adjust the width as needed
+                  padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Optional: Add background color
+                    borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
 
-                            ),
-                            child: TextField(controller: _number_passenger,
-                                decoration: InputDecoration(
-                                    hintText:"Please enter the number of passengers",
-                                    border: OutlineInputBorder(),
-                                    labelText: "No. of passenger "
-                                )),
-                          ),
-                        ],),
-
-              ///Third TextField of the registration
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.speed)),
-                  //column for the other field
-                  Container(
-                    width: 300, // Adjust the width as needed
-                    padding: const EdgeInsets.all(10.0), // Optional: Add padding
-                    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Optional: Add background color
-                      borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
-
-                    ),
-                    child: TextField(controller: _maximum_speed,
-                        decoration: InputDecoration(
-                            hintText:"Please enter the Maximum Speed",
-                            border: OutlineInputBorder(),
-                            labelText: "Max Speed."
-                        )),
                   ),
-                ],),
-
-              ///Fourth Last TextField for the registration
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.social_distance_sharp)),
-                  //column for the other field
-                  Container(
-                    width: 300, // Adjust the width as needed
-                    padding: const EdgeInsets.all(10.0), // Optional: Add padding
-                    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Optional: Add background color
-                      borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
-
-                    ),
-                    child: TextField(controller: _distance,
-                        decoration: InputDecoration(
-                            hintText:"Please Enter the range(distance)",
-                            border: OutlineInputBorder(),
-                            labelText: "Distance"
-                        )),
-                  ),
-                ],),
-
-              //creating Register button to register the user as the customer
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: FilledButton(
-                  onPressed: addAirplane,
-                  child: Text("Add Airplane", style: TextStyle(fontSize: 20)),
+                  child: TextField(controller: _airplaneType,
+                      decoration: InputDecoration(
+                          hintText:"please enter the Airplane Type",
+                          border: OutlineInputBorder(),
+                          labelText: "Airplane Type"
+                      )),
                 ),
-              ),
-            ],
-          ),
-        ],
+
+
+
+                ///second row of the textfield.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.person)),
+                    //column for the other field
+                    Container(
+                      width: 300, // Adjust the width as needed
+                      padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Optional: Add background color
+                        borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                      ),
+                      child: TextField(controller: _number_passenger,
+                          decoration: InputDecoration(
+                              hintText:"Please enter the number of passengers",
+                              border: OutlineInputBorder(),
+                              labelText: "No. of passenger "
+                          )),
+                    ),
+                  ],),
+
+                ///Third TextField of the registration
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.speed)),
+                    //column for the other field
+                    Container(
+                      width: 300, // Adjust the width as needed
+                      padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Optional: Add background color
+                        borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                      ),
+                      child: TextField(controller: _maximum_speed,
+                          decoration: InputDecoration(
+                              hintText:"Please enter the Maximum Speed",
+                              border: OutlineInputBorder(),
+                              labelText: "Max Speed."
+                          )),
+                    ),
+                  ],),
+
+                ///Fourth Last TextField for the registration
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(style: ElevatedButton.styleFrom(elevation: 0),onPressed: () {  }, child: Icon(Icons.social_distance_sharp)),
+                    //column for the other field
+                    Container(
+                      width: 300, // Adjust the width as needed
+                      padding: const EdgeInsets.all(10.0), // Optional: Add padding
+                      margin: const EdgeInsets.fromLTRB(10, 10, 10, 10), // Optional: Add margin
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Optional: Add background color
+                        borderRadius: BorderRadius.circular(10.0), // Optional: Add border radius
+
+                      ),
+                      child: TextField(controller: _distance,
+                          decoration: InputDecoration(
+                              hintText:"Please Enter the range(distance)",
+                              border: OutlineInputBorder(),
+                              labelText: "Distance"
+                          )),
+                    ),
+                  ],),
+
+                //creating Register button to register the user as the customer
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: FilledButton(
+                    onPressed: addAirplane,
+                    child: Text("Add Airplane", style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
 
 
@@ -238,7 +238,7 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
       var newAirplane = Airplane(Airplane.ID++, _airplaneType.value.text, _number_passenger.value.text, _maximum_speed.value.text, _distance.value.text,);
 
       //add to the list first
-        airplaneList.add(newAirplane);
+      airplaneList.add(newAirplane);
 
       //invoking a method to insert the new customer into the table
       airplanedao.insertAirplane(newAirplane);
@@ -323,7 +323,6 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
     _airplaneType.text = "";
     _number_passenger.text = "";
     _maximum_speed.text = "";
-    _distance.text = "";
-  }
+    _distance.text="";}
 
 }
