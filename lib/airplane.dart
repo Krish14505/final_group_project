@@ -1,36 +1,23 @@
+import 'package:floor/floor.dart';
+
+
+@entity
 class Airplane {
-  int? id;
-  final String type;
-  final int passengers;
-  final int speed;
-  final int range;
 
-  Airplane({
-    this.id,
-    required this.type,
-    required this.passengers,
-    required this.speed,
-    required this.range,
-  });
+  static int ID = 1 ;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'type': type,
-      'passengers': passengers,
-      'speed': speed,
-      'range': range,
-    };
+  @primaryKey
+  final int airplane_id;
+  final String airplaneType;
+  final String PassengerNum;
+  final String maxSpeed;
+  final String distance;
+
+
+  Airplane(this.airplane_id,this.airplaneType,this.PassengerNum,this.maxSpeed,this.distance) {
+    if (airplane_id >= ID) {
+      ID = airplane_id + 1;
+    }
   }
 
-  factory Airplane.fromMap(Map<String, dynamic> map) {
-    return Airplane(
-      id: map['id'],
-      type: map['type'],
-      passengers: map['passengers'],
-      speed: map['speed'],
-      range: map['range'],
-    );
-  }
 }
-
