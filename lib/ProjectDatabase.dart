@@ -15,7 +15,7 @@ import 'airplane_dao.dart';
 part 'ProjectDatabase.g.dart';
 
 ///Customer Database class extends FloorDatabase
-
+///database with version 1 when creating the 4 entities into the database
 @Database(version: 1, entities: [Customer,Reservation,Flight,Airplane])
 abstract class ProjectDatabase extends FloorDatabase {
 
