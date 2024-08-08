@@ -94,7 +94,7 @@ class ReservationListState extends State<ReservationList> {
       child:Column(
         children: [
           if(reservationList.isEmpty)
-      Text("*There is no Customer added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+      Text("*There is no reservation added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
     else
             Flexible(
               child: ListView.builder(
@@ -161,6 +161,28 @@ class ReservationListState extends State<ReservationList> {
                   border: OutlineInputBorder(),
                   labelText: "Customer Name"
                 ),),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 350,
+                padding: const EdgeInsets.all(10.0),
+
+                margin: const EdgeInsets.all(10.0),
+
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: TextField(controller: _flightName,
+                  decoration: InputDecoration(
+                      hintText: "Flight Name",
+                      border: OutlineInputBorder(),
+                      labelText: "Flight Name"
+                  ),),
               )
             ],
           ),

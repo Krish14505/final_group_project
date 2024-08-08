@@ -42,7 +42,7 @@ class ReservationPageState extends State<ReservationPage> {
 
 
   void loadData() async {
-    customers = ;
+    customers = ['Krish','Evan','Yazid','Himanshu'];
     flights = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
 
     final database = await $FloorReservationDB.databaseBuilder('reservation_database.db').build();
@@ -71,7 +71,7 @@ class ReservationPageState extends State<ReservationPage> {
       var snackBar = SnackBar( content: Text('successfully Registered!', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       ///navigate to the list page
-      Navigator.pushNamed(context, "/listPage"); //redirect to the home page
+      Navigator.pushNamed(context, "/reservationList"); //redirect to the home page
 
       //database stuff to add the customer
       var reservation = Reservation(Reservation.ID++, _reservationDate.value.text, _reservationName.value.text);
@@ -112,18 +112,18 @@ class ReservationPageState extends State<ReservationPage> {
                   content: const SingleChildScrollView(
                     child: ListBody(
                       children: <Widget>[
-                        Text('1. Adding a Reservation:'),
-                        Text('   - Enter the name of the reservation in the text field provided.'),
-                        Text('   - Press the "Add Reservation" button to add the reservation to the list.'),
+                        Text('1. Adding a Reservation:\n'
+                        '- Enter the name of the reservation in the text field provided.\n'
+                        '- Press the "Add Reservation" button to add the reservation to the list.'),
                         SizedBox(height: 10),
-                        Text('2. Viewing Reservation Details:'),
-                        Text('   - Tap on any reservation in the list to view its details.'),
+                        Text('2. Viewing Reservation Details:\n'
+                         '- Tap on any reservation in the list to view its details.\n'),
                         SizedBox(height: 10),
-                        Text('3. Copying Previous Customer Information:'),
-                        Text('   - When adding a new customer, you can choose to copy the information from the previous customer.'),
+                        Text('3. Copying Previous Customer Information:\n'
+                        '- When adding a new customer, you can choose to copy the information from the previous customer.\n'),
                         SizedBox(height: 10),
-                        Text('4. Navigation:'),
-                        Text('   - Use the back button or the app\'s navigation controls to go back to the home page or other sections of the app.'),
+                        Text('4. Navigation:\n'
+                       '- Use the back button or the app\'s navigation controls to go back to the home page or other sections of the app.'),
                       ],
                     ),
                   ),
