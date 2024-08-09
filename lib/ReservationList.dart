@@ -36,8 +36,8 @@ class ReservationListState extends State<ReservationList> {
   late TextEditingController _depatureTime;
   late TextEditingController _arrivalTime;
 
-
-  void initstate(){
+@override
+  void initState(){
     super.initState();
     _reservationName = TextEditingController();
 
@@ -52,6 +52,7 @@ class ReservationListState extends State<ReservationList> {
     });
   }
 
+  @override
   void dispose() {
     _reservationName.dispose();
     _customerName.dispose();
