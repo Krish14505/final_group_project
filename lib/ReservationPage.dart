@@ -33,7 +33,7 @@ class ReservationPageState extends State<ReservationPage> {
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
-
+    _reservationDate = TextEditingController();
     //initialize the SavedReservation object
     savedReservation = EncryptedSharedPreferences();
 
@@ -52,7 +52,11 @@ class ReservationPageState extends State<ReservationPage> {
     //savedReservation() function called
     savedReservationData();
   }
-
+  @override
+  void dispose() {
+    _reservationName.dispose();
+    _reservationDate.dispose();
+  }
 
   void _addReservation() async {
           if(_reservationDate ==  null || _reservationName.value.text == null ) {
