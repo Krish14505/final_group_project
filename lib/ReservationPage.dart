@@ -3,10 +3,12 @@ import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'AppLocalizations.dart';
 import 'CustomerDAO.dart';
 import 'ProjectDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
+import 'main.dart';
 
 class ReservationPage extends StatefulWidget {
   @override
@@ -139,6 +141,10 @@ class ReservationPageState extends State<ReservationPage> {
             },
             icon: Icon(Icons.info),
           ),
+
+          ///Added the Language Translator Icon for changing language
+          OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.language_outlined), style: OutlinedButton.styleFrom(side: BorderSide.none, ),),
+
         ],
       ),
       body: Padding(
@@ -236,5 +242,27 @@ class ReservationPageState extends State<ReservationPage> {
   }
   void navigateToRL(){
     Navigator.pushNamed(context,'/reservation');
+  }
+
+
+//function which show the alert dialog to select the language
+  void showTranslateButton() {
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          FilledButton(onPressed:() {
+            MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ],
+      ),
+    );
   }
 }
