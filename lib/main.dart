@@ -22,20 +22,19 @@ class MyApp extends StatefulWidget {
 
   //given setLocale method in module
   static void setLocale(BuildContext context, Locale newLocale) async {
-    MyAppState? state = context.findAncestorStateOfType<MyAppState>();
-    state?.changeLanguage(newLocale); // calls changeLanguage
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale);
   }
-
   //override the method
   @override
-
   State<MyApp> createState() {
-    return MyAppState();
+    return _MyAppState();
   }
+
 }
 
 
-  class MyAppState extends State<MyApp> {
+  class _MyAppState extends State<MyApp> {
 
   //create the variable for Locale
     var locale = Locale("en","CA");
@@ -50,21 +49,18 @@ class MyApp extends StatefulWidget {
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
-
-
-
         //declares the supportedLanguages for the application
         supportedLocales: [
+                       Locale("de","DE"),
                         Locale("en","CA"),
-                        Locale("de","DE"),
                         Locale("fr","CA")
-
         ],
 
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
         ],
 
         //set the default language
@@ -113,10 +109,8 @@ class MyHomePage extends StatefulWidget {
 
 ///class that contains four button which redirects different pages
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   void _incrementCounter() {
     setState(() {
-      _counter++;
     });
   }
 
@@ -127,10 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-        //implement a button to change the language to all the application pages.
-
-
-
+        //implement a button to change the language to all the appzlication pages.
         actions: [
           OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.translate), style: OutlinedButton.styleFrom(side: BorderSide.none, ),)
         ],
