@@ -9,7 +9,7 @@ import 'ProjectDatabase.dart';
 
 class FLightRegistration extends StatefulWidget{
 
-  String title = "Flight List Page";
+  String title = "Flight Registration Page";
   @override
   State<StatefulWidget> createState() {
 
@@ -73,6 +73,8 @@ class FlightListPageState extends State<FLightRegistration>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.cyan,
+        title: Text(widget.title,style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold)) ,
 
       ),
 
@@ -220,7 +222,7 @@ void addFlight() {
     var snackBar = SnackBar( content: Text("Fight successfully added", style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: Colors.green),) );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    Navigator.pushNamed(context, "/flightList");
+    Navigator.pushNamed(context, "/flightListPage");
 
     ///adding to the database
 

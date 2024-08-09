@@ -81,7 +81,7 @@ class MyApp extends StatefulWidget {
           '/airplaneRegister' : (context) => AirplaneRegister(),
           '/airplaneList' : (context) => AirplaneListPage(),
           '/reservationPage': (context) => ReservationPage(),
-          '/reservation': (context) => ReservationList(),
+          '/reservationList': (context) => ReservationList(),
           '/flightRegister': (context) => FLightRegistration(),
           '/flightListPage': (context) => FlightsListPage()
 
@@ -90,7 +90,7 @@ class MyApp extends StatefulWidget {
         title: 'Home page',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
           useMaterial3: true,
         ),
 
@@ -119,9 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-  void navigateToRP(){
-    Navigator.pushNamed(context,'/reservation');
-  }
+
   @override
   Widget build(BuildContext context) {
 
