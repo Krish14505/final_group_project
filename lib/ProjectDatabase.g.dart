@@ -347,17 +347,8 @@ class _$ReservationDAO extends ReservationDAO {
   final DeletionAdapter<Reservation> _reservationDeletionAdapter;
 
   @override
-  Future<List<Reservation>> fetchAllReservations() async {
-    return _queryAdapter.queryList('SELECT * FROM Reservation',
-        mapper: (Map<String, Object?> row) => Reservation(
-            row['reservationId'] as int,
-            row['reservationDate'] as String,
-            row['reservationName'] as String));
-  }
-
-  @override
   Future<List<Reservation>> getAllReservations() async {
-    return _queryAdapter.queryList('SELECT * FROM Reservation',
+    return _queryAdapter.queryList('SELECT * FROM reservations',
         mapper: (Map<String, Object?> row) => Reservation(
             row['reservationId'] as int,
             row['reservationDate'] as String,

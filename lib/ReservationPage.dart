@@ -47,7 +47,7 @@ class ReservationPageState extends State<ReservationPage> {
       reservationDAO = database.getReservationDAO;
       customerDAO = database.getCustomerDAO;
       flightsDAO = database.getFlightDAO;
-
+      print('Database initialized: $reservationDAO, $customerDAO, $flightsDAO');
       reservationDAO.getAllReservations().then((listOfReservations) {
         setState(() {
           reservationList = listOfReservations;
@@ -55,14 +55,14 @@ class ReservationPageState extends State<ReservationPage> {
       }).catchError((error) {
         print('Error loading reservations: $error');
       });
-
+      savedReservationData();
       loadCustomersAndFlights();
     });
   }
 
 
   void loadCustomersAndFlights() {
-    // Assuming Customer has a 'first_name' field
+    // Adding customer first name.
     customerDAO.getAllCustomers().then((customers) {
       setState(() {
         customersList = customers.map((customer) => customer.first_name).toList();
@@ -84,7 +84,7 @@ class ReservationPageState extends State<ReservationPage> {
   }
 
   void _addReservation() async {
-          if(_reservationDate ==  null || _reservationName.value.text == null ) {
+          if(_reservationDate.text.isEmpty || _reservationName.text.isEmpty ) {
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -249,7 +249,7 @@ class ReservationPageState extends State<ReservationPage> {
 
     savedReservation.getString("reservation_Date").then((encryptedReservationDate) {
       if(encryptedReservationDate !=null){
-        _reservationName.text = encryptedReservationDate;
+        _reservationDate.text = encryptedReservationDate;
       }
 
     });
