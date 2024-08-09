@@ -7,7 +7,7 @@ import 'Flight.dart';
 import 'FlightsDAO.dart';
 import 'ProjectDatabase.dart';
 
-class FlightListPage extends StatefulWidget{
+class FLightRegistration extends StatefulWidget{
 
   String title = "Flight List Page";
   @override
@@ -19,7 +19,7 @@ class FlightListPage extends StatefulWidget{
 
 }
 
-class FlightListPageState extends State<FlightListPage>{
+class FlightListPageState extends State<FLightRegistration>{
 
   late FlightsDAO flightsDAO;
   static List<Flight> flightList = [ ];
