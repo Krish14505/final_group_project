@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/AirplaneRegisterpage.dart';
 import 'package:group_project/Airplane_list_page.dart';
+import 'package:group_project/FlightRegistration.dart';
+import 'package:group_project/FlightsListPage.dart';
 import 'package:group_project/ReservationList.dart';
 import 'package:group_project/ReservationPage.dart';
 
@@ -20,20 +22,19 @@ class MyApp extends StatefulWidget {
 
   //given setLocale method in module
   static void setLocale(BuildContext context, Locale newLocale) async {
-    MyAppState? state = context.findAncestorStateOfType<MyAppState>();
-    state?.changeLanguage(newLocale); // calls changeLanguage
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale);
   }
-
   //override the method
   @override
-
   State<MyApp> createState() {
-    return MyAppState();
+    return _MyAppState();
   }
+
 }
 
 
-  class MyAppState extends State<MyApp> {
+  class _MyAppState extends State<MyApp> {
 
   //create the variable for Locale
     var locale = Locale("en","CA");
@@ -48,21 +49,18 @@ class MyApp extends StatefulWidget {
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
-
-
-
         //declares the supportedLanguages for the application
         supportedLocales: [
+                       Locale("de","DE"),
                         Locale("en","CA"),
-                        Locale("de","DE"),
                         Locale("fr","CA")
-
         ],
 
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
         ],
 
         //set the default language
@@ -78,12 +76,10 @@ class MyApp extends StatefulWidget {
           '/listPage': (context) => CustomerListPage(),
           '/airplaneRegister' : (context) => AirplaneRegister(),
           '/airplaneList' : (context) => AirplaneListPage(),
-          '/reservationpage': (context) => ReservationPage(),
-          "/reservation": (context) => ReservationList(),
-
-
-          //add other pages that you have made.
-
+          '/reservationPage': (context) => ReservationPage(),
+          '/reservationList': (context) => ReservationList(),
+          '/flightRegister': (context) => FLightRegistration(),
+          '/flightListPage': (context) => FlightsListPage()
 
         },
         initialRoute: '/homePage',
@@ -113,15 +109,11 @@ class MyHomePage extends StatefulWidget {
 
 ///class that contains four button which redirects different pages
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   void _incrementCounter() {
     setState(() {
-      _counter++;
     });
   }
-  void navigateToRP(){
-    Navigator.pushNamed(context,'/reservation');
-  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -129,10 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-        //implement a button to change the language to all the application pages.
-
-
-
+        //implement a button to change the language to all the appzlication pages.
         actions: [
           OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.translate), style: OutlinedButton.styleFrom(side: BorderSide.none, ),)
         ],
@@ -159,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 10,),
 
               //3. button for Flights Page
-              ElevatedButton(onPressed: () {  }, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
+              ElevatedButton(onPressed: flightsDirector, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
               SizedBox(height: 10,),
 
 
@@ -211,8 +200,14 @@ void airplaneRegisterDirector() {
     Navigator.pushNamed(context, '/airplaneRegister');
 }
 
+///Function to redirect to register page for the reservation
 void reservationDirector() {
-    Navigator.pushNamed(context, '/reservationpage');
+    Navigator.pushNamed(context, '/reservationPage');
+}
+
+///function to redirect to flight register page.
+void flightsDirector(){
+    Navigator.pushNamed(context, '/flightRegister');
 }
 
 

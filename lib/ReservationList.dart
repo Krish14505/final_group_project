@@ -3,10 +3,9 @@ import 'dart:ffi';
 import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/ProjectDatabase.dart';
 
 
-import 'AppLocalizations.dart';
-import 'CustomerDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
 import 'ReservationPage.dart';
@@ -49,7 +48,7 @@ class ReservationListState extends State<ReservationList> {
     });
 
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
       var reservationDAO = database.getReservationDAO;
       reservationDAO.getAllReservations().then((listofReservation) {
         reservationList.addAll(listofReservation);
@@ -110,7 +109,7 @@ class ReservationListState extends State<ReservationList> {
       child:Column(
         children: [
           if(reservationList.isEmpty)
-      Text(AppLocalizations.of(context)!.translate("RLelT")!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+      Text("*There is no reservation added yet*",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
     else
             Flexible(
               child: ListView.builder(
@@ -146,14 +145,14 @@ class ReservationListState extends State<ReservationList> {
   }
   Widget ReservationDetailsWithForm(){
     if (selectedReservation == null){
-      return Text(AppLocalizations.of(context)!.translate("RLdetformAlert")!);
+      return Text("Nothing is selected ");
     } else {
       return SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 20),
-          Text(AppLocalizations.of(context)!.translate("RLdetformInfo")!, style: TextStyle(
+          Text("Reservation Details", style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,
             fontStyle: FontStyle.italic

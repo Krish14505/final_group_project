@@ -1,38 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'CustomerDatabase.dart';
+part of 'ProjectDatabase.dart';
 
 // **************************************************************************
 // FloorGenerator
 // **************************************************************************
 
-abstract class $CustomerDatabaseBuilderContract {
+abstract class $ProjectDatabaseBuilderContract {
   /// Adds migrations to the builder.
-  $CustomerDatabaseBuilderContract addMigrations(List<Migration> migrations);
+  $ProjectDatabaseBuilderContract addMigrations(List<Migration> migrations);
 
   /// Adds a database [Callback] to the builder.
-  $CustomerDatabaseBuilderContract addCallback(Callback callback);
+  $ProjectDatabaseBuilderContract addCallback(Callback callback);
 
   /// Creates the database and initializes it.
-  Future<CustomerDatabase> build();
+  Future<ProjectDatabase> build();
 }
 
 // ignore: avoid_classes_with_only_static_members
-class $FloorCustomerDatabase {
+class $FloorProjectDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $CustomerDatabaseBuilderContract databaseBuilder(String name) =>
-      _$CustomerDatabaseBuilder(name);
+  static $ProjectDatabaseBuilderContract databaseBuilder(String name) =>
+      _$ProjectDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $CustomerDatabaseBuilderContract inMemoryDatabaseBuilder() =>
-      _$CustomerDatabaseBuilder(null);
+  static $ProjectDatabaseBuilderContract inMemoryDatabaseBuilder() =>
+      _$ProjectDatabaseBuilder(null);
 }
 
-class _$CustomerDatabaseBuilder implements $CustomerDatabaseBuilderContract {
-  _$CustomerDatabaseBuilder(this.name);
+class _$ProjectDatabaseBuilder implements $ProjectDatabaseBuilderContract {
+  _$ProjectDatabaseBuilder(this.name);
 
   final String? name;
 
@@ -41,23 +41,23 @@ class _$CustomerDatabaseBuilder implements $CustomerDatabaseBuilderContract {
   Callback? _callback;
 
   @override
-  $CustomerDatabaseBuilderContract addMigrations(List<Migration> migrations) {
+  $ProjectDatabaseBuilderContract addMigrations(List<Migration> migrations) {
     _migrations.addAll(migrations);
     return this;
   }
 
   @override
-  $CustomerDatabaseBuilderContract addCallback(Callback callback) {
+  $ProjectDatabaseBuilderContract addCallback(Callback callback) {
     _callback = callback;
     return this;
   }
 
   @override
-  Future<CustomerDatabase> build() async {
+  Future<ProjectDatabase> build() async {
     final path = name != null
         ? await sqfliteDatabaseFactory.getDatabasePath(name!)
         : ':memory:';
-    final database = _$CustomerDatabase();
+    final database = _$ProjectDatabase();
     database.database = await database.open(
       path,
       _migrations,
@@ -67,8 +67,8 @@ class _$CustomerDatabaseBuilder implements $CustomerDatabaseBuilderContract {
   }
 }
 
-class _$CustomerDatabase extends CustomerDatabase {
-  _$CustomerDatabase([StreamController<String>? listener]) {
+class _$ProjectDatabase extends ProjectDatabase {
+  _$ProjectDatabase([StreamController<String>? listener]) {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
@@ -78,7 +78,7 @@ class _$CustomerDatabase extends CustomerDatabase {
 
   ReservationDAO? _getReservationDAOInstance;
 
-  FlightsDAO? _flightsDAOInstance;
+  FlightsDAO? _getFlightDAOInstance;
 
   Future<sqflite.Database> open(
     String path,
@@ -86,7 +86,7 @@ class _$CustomerDatabase extends CustomerDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 3,
+      version: 1,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -104,11 +104,11 @@ class _$CustomerDatabase extends CustomerDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`customer_id` INTEGER NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `email` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `address` TEXT NOT NULL, `birthday` TEXT NOT NULL, PRIMARY KEY (`customer_id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER NOT NULL, `airplaneType` TEXT NOT NULL, `number_passenger` TEXT NOT NULL, `maximum_speed` TEXT NOT NULL, `distance` TEXT NOT NULL, PRIMARY KEY (`id`))');
-        await database.execute(
             'CREATE TABLE IF NOT EXISTS `reservations` (`reservationId` INTEGER NOT NULL, `reservationDate` TEXT NOT NULL, `reservationName` TEXT NOT NULL, PRIMARY KEY (`reservationId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Flight` (`flight_id` INTEGER NOT NULL, `destination` TEXT NOT NULL, `source` TEXT NOT NULL, `departure` INTEGER NOT NULL, `arrival` INTEGER NOT NULL, PRIMARY KEY (`flight_id`))');
+            'CREATE TABLE IF NOT EXISTS `Flight` (`flight_id` INTEGER NOT NULL, `destination` TEXT NOT NULL, `source` TEXT NOT NULL, `departure` TEXT NOT NULL, `arrival` TEXT NOT NULL, PRIMARY KEY (`flight_id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER NOT NULL, `airplaneType` TEXT NOT NULL, `number_passenger` TEXT NOT NULL, `maximum_speed` TEXT NOT NULL, `distance` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -133,8 +133,8 @@ class _$CustomerDatabase extends CustomerDatabase {
   }
 
   @override
-  FlightsDAO get flightsDAO {
-    return _flightsDAOInstance ??= _$FlightsDAO(database, changeListener);
+  FlightsDAO get getFlightDAO {
+    return _getFlightDAOInstance ??= _$FlightsDAO(database, changeListener);
   }
 }
 
@@ -439,8 +439,8 @@ class _$FlightsDAO extends FlightsDAO {
             row['flight_id'] as int,
             row['destination'] as String,
             row['source'] as String,
-            row['arrival'] as int,
-            row['departure'] as int));
+            row['arrival'] as String,
+            row['departure'] as String));
   }
 
   @override

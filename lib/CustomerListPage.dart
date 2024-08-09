@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/ProjectDatabase.dart';
 
 import 'Customer.dart';
 import 'CustomerDAO.dart';
-import 'CustomerDatabase.dart';
 import 'Customer_Registration.dart';
 
 /**
@@ -51,7 +51,7 @@ class CustomerListPageState extends State<CustomerListPage> {
     _birthday = TextEditingController();
 
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       customerdao = database.getCustomerDAO; // instantiate the database object
 
       //fetch the customer from the customerList and put all into the database
@@ -405,8 +405,11 @@ Widget customerDetailsWithForm() {
       //delete the customer from the database first
       customerdao.deleteCustomer(selectedCustomer!);
 
-      //and then remove from the customer
-      customerLists.remove(selectedCustomer);
+   setState(() {
+     //and then remove from the customer
+     customerLists.remove(selectedCustomer);
+
+   });
 
     });
 

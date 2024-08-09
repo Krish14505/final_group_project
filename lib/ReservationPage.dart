@@ -2,12 +2,14 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_project/FlightsDAO.dart';
 
 import 'AppLocalizations.dart';
 import 'CustomerDAO.dart';
-import 'CustomerDatabase.dart';
+import 'ProjectDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
+import 'main.dart';
 
 class ReservationPage extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class ReservationPage extends StatefulWidget {
 class ReservationPageState extends State<ReservationPage> {
   late ReservationDAO reservationDAO;
   late CustomerDAO customerDAO;
+  late FlightsDAO flightsDAO;
   static List<Reservation> reservationList = [];
 
   String? selectedCustomer;
@@ -30,35 +33,55 @@ class ReservationPageState extends State<ReservationPage> {
   //Created the encrypted Shared preferences variable
   late EncryptedSharedPreferences savedReservation;
 
+
   @override
   void initState() {
     super.initState();
     _reservationName = TextEditingController();
-
-    //initialize the SavedReservation object
+    _reservationDate = TextEditingController();
     savedReservation = EncryptedSharedPreferences();
 
-    //add the migration to keep the reservation table in the same customerDatabase
-    final migration2to3 = Migration(2, 3, (database) async{
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS 'Reservation' (`reservationId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reservationDate` TEXT, `reservationName` TEXT)"
-      );
-    });
-
-    //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration2to3]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder('app_database.db')
+        .build()
+        .then((database) {
       reservationDAO = database.getReservationDAO;
       customerDAO = database.getCustomerDAO;
-      reservationDAO.getAllReservations().then((listofReservation) {
-        reservationList.addAll(listofReservation);
+      flightsDAO = database.getFlightDAO;
 
-
+      reservationDAO.getAllReservations().then((listOfReservations) {
+        setState(() {
+          reservationList = listOfReservations;
+        });
+      }).catchError((error) {
+        print('Error loading reservations: $error');
       });
+
+      loadCustomersAndFlights();
     });
-    //savedReservation() function called
-    savedReservationData();
   }
 
+
+  void loadCustomersAndFlights() {
+    // Assuming Customer has a 'first_name' field
+    customerDAO.getAllCustomers().then((customers) {
+      setState(() {
+        customersList = customers.map((customer) => customer.first_name).toList();
+      });
+    }).catchError((error) {
+      print('Error loading customers: $error');
+    });
+
+    // For testing, hardcoded flight data
+    flightsList = ['Flight1', 'Flight2', 'Flight3', 'Flight4', 'Flight5'];
+    setState(() {}); // Ensure the UI is updated after setting flightsList
+  }
+
+
+  @override
+  void dispose() {
+    _reservationName.dispose();
+    _reservationDate.dispose();
+  }
 
   void _addReservation() async {
           if(_reservationDate ==  null || _reservationName.value.text == null ) {
@@ -132,6 +155,10 @@ class ReservationPageState extends State<ReservationPage> {
             },
             icon: Icon(Icons.info),
           ),
+
+          ///Added the Language Translator Icon for changing language
+          OutlinedButton( onPressed: showTranslateButton, child: Icon(Icons.language_outlined), style: OutlinedButton.styleFrom(side: BorderSide.none, ),),
+
         ],
       ),
       body: Padding(
@@ -230,24 +257,26 @@ class ReservationPageState extends State<ReservationPage> {
   void navigateToRL(){
     Navigator.pushNamed(context,'/reservation');
   }
-}
 
-void showTranslateButton(){
-  //alert dialog which has three button of the languages
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Choose Language:'),
-      content: const Text(''),
-      actions: <Widget>[
-        //button for french
-        FilledButton(onPressed:() {
-          MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
-        ElevatedButton(onPressed:(){
-          MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
-        ElevatedButton(onPressed:(){
-          MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
-      ],
-    ),
-  );
+
+//function which show the alert dialog to select the language
+  void showTranslateButton() {
+    //alert dialog which has three button of the languages
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Choose Language:'),
+        content: const Text(''),
+        actions: <Widget>[
+          //button for french
+          FilledButton(onPressed:() {
+            MyApp.setLocale(context, Locale("de","DE")); Navigator.pop(context); }, style: OutlinedButton.styleFrom(side: BorderSide.none, ),child: Text(AppLocalizations.of(context)!.translate("german_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("en","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("english_key")!)),
+          ElevatedButton(onPressed:(){
+            MyApp.setLocale(context, Locale("fr","CA")); Navigator.pop(context);   }, style: OutlinedButton.styleFrom(side: BorderSide.none, ), child: Text(AppLocalizations.of(context)!.translate("french_key")!)),
+        ],
+      ),
+    );
+  }
 }

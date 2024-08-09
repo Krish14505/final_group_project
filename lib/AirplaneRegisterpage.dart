@@ -2,9 +2,9 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/CustomerDatabase.dart';
 
 import 'AppLocalizations.dart';
+import 'ProjectDatabase.dart';
 import 'airplane.dart';
 import 'airplane_dao.dart';
 import 'main.dart';
@@ -64,13 +64,9 @@ class AirplaneRegistrationState extends State<AirplaneRegister> {
     ///Pending the FloorDatabase thing
     //add the migration
 
-    final migration1to2 = Migration(1, 2, (database) async {
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS `Airplane` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `airplaneType` TEXT, `PassengerNum` TEXT, `maxSpeed` TEXT, `distance` TEXT)",
-      );
-    });
+
     //creating the database connection
-    $FloorCustomerDatabase.databaseBuilder("app_database.db").addMigrations([migration1to2]).build().then((database) {
+    $FloorProjectDatabase.databaseBuilder("app_database.db").build().then((database) {
       airplanedao = database.getAirplaneDAO; // instantiate the database object
       //fetch the customer from the customerList and put all into the database
       airplanedao.getAllAirPlanes().then((listOfAirplanes) {

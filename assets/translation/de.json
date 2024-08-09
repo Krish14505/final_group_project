@@ -41,21 +41,5 @@
   "RPresnameL": "Reservierungsname",
   "RPresdateH": "Geben Sie das Reservierungsdatum ein",
   "RPresdateL": "Reservierungsdatum",
-  "RPaddButton": "Reservierung hinzufügen",
-  "RLtitle": "Reservierungsliste",
-  "RLelT": "*Es wurde noch keine Reservierung hinzugefügt*",
-  "RLdetformAlert": "Nichts ausgewählt",
-  "RLdetformInfo": "Reservierungsdetails",
-  "RLcnameHT": "Kundenname",
-  "RLcnameLT": "Kundenname",
-  "RLfnameHT": "Flugname",
-  "RLdepcityHT": "Abflugstadt",
-  "RLdepcityLT": "Abflugstadt",
-  "RLdestcityHT": "Zielstadt",
-  "RLdescityLT": "Zielstadt",
-  "RLdeptimeHT": "Abflugzeit",
-  "RLdeptimeLT": "Abflugzeit",
-  "RLarrtimeHT": "Ankunftszeit",
-  "RLarrtimeLT": "Ankunftszeit"
-
+  "RPaddButton": "Reservierung hinzufügen"
 }

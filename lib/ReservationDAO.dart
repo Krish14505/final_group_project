@@ -3,8 +3,6 @@ import 'Reservation.dart';
 
 @dao
 abstract class ReservationDAO {
-  @Query('SELECT * FROM Reservation')
-  Future<List<Reservation>> fetchAllReservations();
 
   @delete
   Future<int> deleteReservation(Reservation reservation);
@@ -15,6 +13,6 @@ abstract class ReservationDAO {
   @update
   Future<int> updateReservation(Reservation reservation);
 
-  @Query('SELECT * FROM Reservation')
+  @Query('SELECT * FROM reservations')
   Future<List<Reservation>> getAllReservations();
 }
