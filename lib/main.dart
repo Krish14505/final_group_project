@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:group_project/AirplaneRegisterpage.dart';
 import 'package:group_project/Airplane_list_page.dart';
+import 'package:group_project/FlightRegistration.dart';
+import 'package:group_project/FlightsListPage.dart';
 import 'package:group_project/ReservationList.dart';
 import 'package:group_project/ReservationPage.dart';
 
@@ -78,19 +80,17 @@ class MyApp extends StatefulWidget {
           '/listPage': (context) => CustomerListPage(),
           '/airplaneRegister' : (context) => AirplaneRegister(),
           '/airplaneList' : (context) => AirplaneListPage(),
-          '/reservationpage': (context) => ReservationPage(),
-          "/reservation": (context) => ReservationList(),
-
-
-          //add other pages that you have made.
-
+          '/reservationPage': (context) => ReservationPage(),
+          '/reservation': (context) => ReservationList(),
+          '/flightRegister': (context) => FLightRegistration(),
+          '/flightListPage': (context) => FlightsListPage()
 
         },
         initialRoute: '/homePage',
         title: 'Home page',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
           useMaterial3: true,
         ),
 
@@ -159,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 10,),
 
               //3. button for Flights Page
-              ElevatedButton(onPressed: () {  }, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
+              ElevatedButton(onPressed: flightsDirector, child: Text(AppLocalizations.of(context)!.translate("flights_Page")!) ),
               SizedBox(height: 10,),
 
 
@@ -211,8 +211,14 @@ void airplaneRegisterDirector() {
     Navigator.pushNamed(context, '/airplaneRegister');
 }
 
+///Function to redirect to register page for the reservation
 void reservationDirector() {
-    Navigator.pushNamed(context, '/reservationpage');
+    Navigator.pushNamed(context, '/reservationPage');
+}
+
+///function to redirect to flight register page.
+void flightsDirector(){
+    Navigator.pushNamed(context, '/flightRegister');
 }
 
 
