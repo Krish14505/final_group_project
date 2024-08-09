@@ -13,13 +13,13 @@ class FlightListPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
 
-    return flightListPageState();
+    return FlightListPageState();
   }
 
 
 }
 
-class flightListPageState extends State<FlightListPage>{
+class FlightListPageState extends State<FlightListPage>{
 
   late FlightsDAO flightsDAO;
   static List<Flight> flightList = [ ];
