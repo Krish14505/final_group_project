@@ -1,11 +1,10 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
-import 'package:floor/floor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:group_project/FlightsDAO.dart';
 
 import 'AppLocalizations.dart';
 import 'CustomerDAO.dart';
+import 'FlightsDAO.dart';
 import 'ProjectDatabase.dart';
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
