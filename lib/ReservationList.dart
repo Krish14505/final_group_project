@@ -5,7 +5,6 @@ import 'package:group_project/ProjectDatabase.dart';
 
 import 'Reservation.dart';
 import 'ReservationDAO.dart';
-import 'ReservationPage.dart';
 
 class ReservationList extends StatefulWidget {
   String title = "Reservation List";
